@@ -15,28 +15,28 @@ similar_soils(
 )
 }
 \arguments{
-\item{x}{A _data.frame_ or a _SoilProfileCollection_}
+\item{x}{A \emph{data.frame} or a \emph{SoilProfileCollection}}
 
-\item{mapping}{A named _list_ of functions. List element names refer to site-level data columns of `x`. Each specified function provides a conversion of the data element in `x` to a value used in the "similar soils" calculation.}
+\item{mapping}{A named \emph{list} of functions. List element names refer to site-level data columns of \code{x}. Each specified function provides a conversion of the data element in \code{x} to a value used in the "similar soils" calculation.}
 
-\item{condition}{integer or character. Default: `NULL` the value is calculated internally based on the dominant condition of intersection of mapping results in `x`. You may specify an integer row ID in `x` for specific similar soil contrasts, or you can specify a character dominant condition equivalent to the name assigned by `interaction()` e.g. `"4.3"` for a two rating mapping result where the first rating has value `4` and the second has value `3`}
+\item{condition}{integer or character. Default: \code{NULL} the value is calculated internally based on the dominant condition of intersection of mapping results in \code{x}. You may specify an integer row ID in \code{x} for specific similar soil contrasts, or you can specify a character dominant condition equivalent to the name assigned by \code{interaction()} e.g. \code{"4.3"} for a two rating mapping result where the first rating has value \code{4} and the second has value \code{3}}
 
-\item{idname}{ID column name, default `"id"`}
+\item{idname}{ID column name, default \code{"id"}}
 
-\item{thresh}{Sum of differences relative to dominant condition in `x`. Default `1`. See details for discussion on the default calculation for similarity.}
+\item{thresh}{Sum of differences relative to dominant condition in \code{x}. Default \code{1}. See details for discussion on the default calculation for similarity.}
 
-\item{absolute}{logical. Report absolute difference? Default: `TRUE`. Absolute difference is always used for comparison against thresh.}
+\item{absolute}{logical. Report absolute difference? Default: \code{TRUE}. Absolute difference is always used for comparison against thresh.}
 
-\item{verbose}{Default: `TRUE` message about selected `condition`}
+\item{verbose}{Default: \code{TRUE} message about selected \code{condition}}
 }
 \value{
-A _data.frame_ containing inputs and two new columns: `similar_dist` (cumulative sum of differences relative to dominant condition), `similar` (logical)
+A \emph{data.frame} containing inputs and two new columns: \code{similar_dist} (cumulative sum of differences relative to dominant condition), \code{similar} (logical)
 }
 \description{
 A method for applying standardized, customizable "similar soils" rules to site-level data derived from various sources.
 }
 \details{
-The sum of differences across conditions (specified by the intersection of output of the functions in `mapping`) is used as the "distance" of a soil relative to a dominant (or otherwise specified) condition. A threshold value is used to decide which are "similar" and which are not. The functions in mapping can be customized to use alternate thresholds.
+The sum of differences across conditions (specified by the intersection of output of the functions in \code{mapping}) is used as the "distance" of a soil relative to a dominant (or otherwise specified) condition. A threshold value is used to decide which are "similar" and which are not. The functions in mapping can be customized to use alternate thresholds.
 }
 \examples{
 set.seed(456)
