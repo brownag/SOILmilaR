@@ -39,10 +39,11 @@ A method for applying standardized, customizable "similar soils" rules to site-l
 The sum of differences across conditions (specified by the intersection of output of the functions in \code{mapping}) is used as the "distance" of a soil relative to a dominant (or otherwise specified) condition. A threshold value is used to decide which are "similar" and which are not. The functions in mapping can be customized to use alternate thresholds.
 }
 \examples{
+\dontshow{if (!inherits(try(requireNamespace("aqp", quietly=TRUE) && requireNamespace("dplyr", quietly=TRUE) && requireNamespace("cluster", quietly=TRUE), silent=TRUE), 'try-error')) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 set.seed(456)
 
 x <- do.call('rbind', lapply(1:3, \(i) data.frame(id = paste0(LETTERS[1:10], i),
-  taxpartsize = c("fine-loamy", "fine-loamy", "fine-loamy", "fine-loamy",
+  taxpartsize = c("fine-loamy", "loamy", "fine-loamy", "fine-loamy",
                   "coarse-loamy", "coarse-loamy", "coarse-loamy", "loamy-skeletal",
                   "loamy-skeletal", "loamy-skeletal"),
   depth = runif(10, 35, 150),
@@ -104,5 +105,5 @@ s2 <- similar_soils(x, m, absolute=FALSE)
 d2 <- cluster::agnes(s2[, 5, drop = FALSE], method="gaverage")
 d2$height <- d2$height + 0.2 # fudge factor for 0-distance
 plot(stats::as.dendrogram(d2), center=TRUE, type="triangle")
-
+\dontshow{\}) # examplesIf}
 }

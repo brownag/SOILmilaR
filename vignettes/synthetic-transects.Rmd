@@ -1,0 +1,159 @@
+---
+title: "Synthetic Transects"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{synthetic-transects}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(SOILmilaR)
+```
+
+Set pseudorandom number generator seed for consistent results between runs (optional).
+```{r}
+set.seed(123)
+```
+
+Next we will generate some sample data representing 5 "synthetic transects". 
+
+We assume a similar "soil forming function" for these transects across each hypothetical "delineation" being transected. 
+
+Here the values have been customized so that taxonomic particle size is fine-loamy, but coarser textured in higher fragment material. Soil depth varies from shallow to very deep, uniform but centered around moderately deep. `pscs_*` quantities provided for example numeric quantities that can be used.
+ 
+```{r}
+x <- do.call('rbind', lapply(1:3, \(i) data.frame(id = paste0(LETTERS[1:10], i),
+           taxpartsize = c("fine-loamy","loamy","fine-loamy","fine-loamy",
+                           "coarse-loamy", "coarse-loamy", "coarse-loamy",
+                           "loamy-skeletal", "loamy-skeletal", "loamy-skeletal"),
+           depth = runif(10, 35, 150),
+           pscs_clay = c(runif(4, 18, 35), runif(6, 14, 18)),
+           pscs_frags = c(runif(3, 0, 15), runif(4, 10, 34),
+                          runif(3, 35, 60) + c(0, 40, 0)))))
+```
+
+Next we define some rating functions for particle size class and depth class.
+
+```{r}
+rate_taxpartsize <- function(x) {
+  dplyr::case_match(x,
+                    c("sandy-skeletal") ~ 1,
+                    c("sandy") ~ 2,
+                    c("loamy", "coarse-loamy", "coarse-silty") ~ 3,
+                    c("fine-loamy", "fine-silty") ~ 4,
+                    c("clayey", "fine") ~ 5,
+                    c("very-fine") ~ 6,
+                    c("loamy-skeletal", "clayey-skeletal") ~ 7)
+}
+
+rate_depthclass <- function(x,
+                            breaks = c(
+                              `very shallow` = 25,
+                              `shallow` = 50,
+                              `moderately deep` = 100,
+                              `deep` = 150,
+                              `very deep` = 1e4
+                            ),
+                            ...) {
+  res <- cut(x, c(0, breaks))
+  factor(res, levels = levels(res), labels = names(breaks))
+}
+```
+
+The above rating functions can be combined in a list (`m`) which will be use used as the `mapping` argument to `similar_soils()`. The `similar_soils()` function applies the rating functions to the columns of the  input data `x`. Target column names in the data match the names of `m`, providing the "mapping" of data to rating functions.
+
+Now we will demonstrate iterative filtering and application of similar soils criteria. 
+
+```{r}
+m <- list(taxpartsize = rate_taxpartsize,
+          depth =  rate_depthclass)
+
+res0 <- similar_soils(x, m)
+res0
+```
+
+First, we accept what is identified as the "dominant condition" for the dataset, including the similar soils, will be a major component of the hypothetical mapunit. Identifying soils similar to `"7.3"` (moderately deep, skeletal), corresponds to the soils supporting a hypothetical major component in a mapunit. 
+
+We might consider selecting a different reference condition manually after inspection. If we were to do that we could set, for example, `condition="4.4"` to select condition `"4.4"` rather than `"7.3"` that was automatically selected in this example.
+
+Next, let's take the remaining dissimilar soils, and re-apply the similarity criteria based on the next-most-dominant condition. We could consider loosening the concept of "similarity" by setting `thresh=2`.
+
+```{r}
+y <- subset(x, !res0$similar, select = c("id", "taxpartsize", "depth"))
+
+res1 <- similar_soils(y, m)
+res1
+```
+
+At this second step, `"3.4"` (loamy, moderately deep) is the dominant condition, also identified as similar are `"3.4"` (coarse-loamy, deep). One might consider which one of these is the best representative condition for the mapunit (including unobserved areas) regardless of what is "dominant" per se. 
+
+If there are issues with dissimilar soils being included in the same groups, consider revising the rating functions to ensure dissimilar properties have a distance greater than the set threshold (`thresh`). With `similar_soils()`, you can specify an alternate `condition` to compare against, or a  `thresh` value higher or lower than `1`. 
+
+```{r}
+z <- subset(x, !x$id %in% c(res0$id[res0$similar], res1$id[res1$similar]),
+            select = c("id", "taxpartsize", "depth"))
+res2 <- similar_soils(z, m)
+res2
+```
+
+Applying the similar soils criteria a final time, we are left with two components, `"4.3"` and `"3.2"`; the latter is dissimilar (and limiting).
+
+
+Let's reconstruct a data.frame, with the 4 groups of similar soils each identified with a greek letter. We will see which is the most prevalent overall based on the whole dataset. We could also assess prevalence within individual transects.
+
+```{r}
+fin <- do.call('rbind', list(
+  data.frame(component = greekletters[[1]][1], subset(res0, similar)),
+  data.frame(component = greekletters[[1]][2], subset(res1, similar)),
+  data.frame(component = greekletters[[1]][3], subset(res2, similar)),
+  data.frame(component = greekletters[[1]][4], subset(res2, !similar))
+))
+
+# label any unassigned observations
+una <- subset(res0, !res0$id %in% fin$id)
+if (nrow(una) > 0) {
+  fin <- rbind(fin, data.frame(component = "unassigned", una))
+}
+
+# put in original order of dataset
+fin <- fin[match(x$id, fin$id), ]
+```
+
+We can tabulate the assignments we made and see how that corresponds with our concept for the relative abundance of the soils on the landscape in the typical delineation.
+
+```{r}
+res <- sort(prop.table(table(fin$component)), decreasing = TRUE)
+res
+```
+
+
+```{r}
+# TODO: abstract this concept
+cmp <- subset(fin, component == names(res[1]))
+ref <- names(tail(sort(table(
+  interaction(cmp$taxpartsize, cmp$depth)
+)), 1))
+fin_sim <- similar_soils(x, m, ref)
+
+# transfer similarity distance and similar ranking
+fin$similar_dist <- fin_sim$similar_dist
+fin$similar <- fin_sim$similar # similarity to the dominant condition within Beta
+
+# original sort order
+fin
+```
+
+```{r, echo=FALSE}
+# sort based on distance from dominant condition
+knitr::kable(fin[order(fin$similar_dist),])
+```
+
+

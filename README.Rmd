@@ -38,7 +38,7 @@ library(SOILmilaR)
 set.seed(456)
 
 x <- do.call('rbind', lapply(1:3, \(i) data.frame(id = paste0(LETTERS[1:10], i),
-  taxpartsize = c("fine-loamy", "fine-loamy", "fine-loamy", "fine-loamy",
+  taxpartsize = c("fine-loamy", "loamy", "fine-loamy", "fine-loamy",
                   "coarse-loamy", "coarse-loamy", "coarse-loamy", "loamy-skeletal",
                   "loamy-skeletal", "loamy-skeletal"),
   depth = runif(10, 35, 150),
@@ -66,8 +66,6 @@ rate_depthclass <- function(x,
                               `deep` = 150,
                               `very deep` = 1e4
                             ),
-                            pattern = "R|Cr|Cd|kk|m",
-                            hzdesgn = aqp::guessHzDesgnName(x, required = TRUE),
                             ...) {
   res <- cut(x, c(0, breaks))
   factor(res, levels = levels(res), labels = names(breaks), ordered = TRUE)

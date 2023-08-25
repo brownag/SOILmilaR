@@ -26,18 +26,10 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(SOILmilaR)
-#> The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,
-#> which was just loaded, will retire in October 2023.
-#> Please refer to R-spatial evolution reports for details, especially
-#> https://r-spatial.org/r/2023/05/15/evolution4.html.
-#> It may be desirable to make the sf package available;
-#> package maintainers should consider adding sf to Suggests:.
-#> The sp package is now running under evolution status 2
-#>      (status 2 uses the sf package in place of rgdal)
 set.seed(456)
 
 x <- do.call('rbind', lapply(1:3, \(i) data.frame(id = paste0(LETTERS[1:10], i),
-  taxpartsize = c("fine-loamy", "fine-loamy", "fine-loamy", "fine-loamy",
+  taxpartsize = c("fine-loamy", "loamy", "fine-loamy", "fine-loamy",
                   "coarse-loamy", "coarse-loamy", "coarse-loamy", "loamy-skeletal",
                   "loamy-skeletal", "loamy-skeletal"),
   depth = runif(10, 35, 150),
@@ -65,8 +57,6 @@ rate_depthclass <- function(x,
                               `deep` = 150,
                               `very deep` = 1e4
                             ),
-                            pattern = "R|Cr|Cd|kk|m",
-                            hzdesgn = aqp::guessHzDesgnName(x, required = TRUE),
                             ...) {
   res <- cut(x, c(0, breaks))
   factor(res, levels = levels(res), labels = names(breaks), ordered = TRUE)
@@ -86,7 +76,7 @@ s <- similar_soils(x, m)
 head(s)
 #>   id taxpartsize depth pscs_clay similar_dist similar
 #> 1 A1           4     2         2            5   FALSE
-#> 2 B1           4     3         2            4   FALSE
+#> 2 B1           3     3         2            5   FALSE
 #> 3 C1           4     4         3            6   FALSE
 #> 4 D1           4     4         3            6   FALSE
 #> 5 E1           3     4         1            5   FALSE

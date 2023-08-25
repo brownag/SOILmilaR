@@ -8,4 +8,12 @@
 \description{
 Provides methods for applying standardized, customizable "similar soils" rules to site-level data derived from various sources.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{http://github.com/brownag/SOILmilaR}
+  \item \url{http://humus.rocks/SOILmilaR/}
+}
+
+}
 \keyword{internal}

@@ -16,11 +16,11 @@
 #' @return A _data.frame_ containing inputs and two new columns: `similar_dist` (cumulative sum of differences relative to dominant condition), `similar` (logical)
 #' @export
 #'
-#' @examples
+#' @examplesIf !inherits(try(requireNamespace("aqp", quietly=TRUE) && requireNamespace("dplyr", quietly=TRUE) && requireNamespace("cluster", quietly=TRUE), silent=TRUE), 'try-error')
 #' set.seed(456)
 #'
 #' x <- do.call('rbind', lapply(1:3, \(i) data.frame(id = paste0(LETTERS[1:10], i),
-#'   taxpartsize = c("fine-loamy", "fine-loamy", "fine-loamy", "fine-loamy",
+#'   taxpartsize = c("fine-loamy", "loamy", "fine-loamy", "fine-loamy",
 #'                   "coarse-loamy", "coarse-loamy", "coarse-loamy", "loamy-skeletal",
 #'                   "loamy-skeletal", "loamy-skeletal"),
 #'   depth = runif(10, 35, 150),
@@ -82,9 +82,6 @@
 #' d2 <- cluster::agnes(s2[, 5, drop = FALSE], method="gaverage")
 #' d2$height <- d2$height + 0.2 # fudge factor for 0-distance
 #' plot(stats::as.dendrogram(d2), center=TRUE, type="triangle")
-#'
-#' @importFrom aqp site
-#' @importClassesFrom aqp SoilProfileCollection
 similar_soils <- function(
    x,
    mapping,
@@ -96,8 +93,11 @@ similar_soils <- function(
  ) {
 
   # currently only site-level attributes of a SoilProfileCollection are considered
-  if (inherits(x, 'SoilProfileCollection'))
+  if (inherits(x, 'SoilProfileCollection') &&
+      requireNamespace("aqp", quietly = TRUE)) {
+    idname <- aqp::idname(x)
     x <- aqp::site(x)
+  }
 
   # apply mapping to determine conditions from properties
   r <- .rate_fun(x, mapping)

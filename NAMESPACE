@@ -2,5 +2,3 @@
 
 export(similar_soils)
 import(data.table)
-importClassesFrom(aqp,SoilProfileCollection)
-importFrom(aqp,site)

@@ -1,7 +1,7 @@
 Package: SOILmilaR
 Type: Package
 Title: Apply Similar Soils Contrasts
-Version: 0.0.1
+Version: 0.0.2
 Author: Andrew Brown
 Maintainer: Andrew Brown <andrew.g.brown@usda.gov>
 Description: Provides methods for applying standardized, customizable "similar soils" rules to site-level data derived from various sources.
@@ -12,4 +12,14 @@ RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Depends: R (>= 3.5)
 Imports: data.table
-Suggests: cluster, aqp, soilDB
+Suggests: 
+    cluster,
+    aqp,
+    soilDB,
+    sharpshootR,
+    dplyr,
+    knitr,
+    rmarkdown, 
+    tinytest
+VignetteBuilder: knitr
+URL: http://github.com/brownag/SOILmilaR, http://humus.rocks/SOILmilaR/
