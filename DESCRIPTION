@@ -1,7 +1,7 @@
 Package: SOILmilaR
 Type: Package
 Title: Apply Similar Soils Contrasts
-Version: 0.0.2
+Version: 0.0.3
 Author: Andrew Brown
 Maintainer: Andrew Brown <andrew.g.brown@usda.gov>
 Description: Provides methods for applying standardized, customizable "similar soils" rules to site-level data derived from various sources.
