@@ -22,6 +22,24 @@
     <loc>http://humus.rocks/SOILmilaR/index.html</loc>
   </url>
   <url>
+    <loc>http://humus.rocks/SOILmilaR/reference/BinomCIMeanBootCustom.html</loc>
+  </url>
+  <url>
+    <loc>http://humus.rocks/SOILmilaR/reference/BinomCIMeanNorm.html</loc>
+  </url>
+  <url>
+    <loc>http://humus.rocks/SOILmilaR/reference/BinomCIMeanPoolCustom.html</loc>
+  </url>
+  <url>
+    <loc>http://humus.rocks/SOILmilaR/reference/BinomCIMeanPoolNorm.html</loc>
+  </url>
+  <url>
+    <loc>http://humus.rocks/SOILmilaR/reference/BinomVarCustom.html</loc>
+  </url>
+  <url>
+    <loc>http://humus.rocks/SOILmilaR/reference/BinomVarNorm.html</loc>
+  </url>
+  <url>
     <loc>http://humus.rocks/SOILmilaR/reference/SOILmilaR-package.html</loc>
   </url>
   <url>
@@ -29,6 +47,9 @@
   </url>
   <url>
     <loc>http://humus.rocks/SOILmilaR/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>http://humus.rocks/SOILmilaR/reference/pscs_weighted.html</loc>
   </url>
   <url>
     <loc>http://humus.rocks/SOILmilaR/reference/similar_soils.html</loc>
