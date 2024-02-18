@@ -1,10 +1,13 @@
 library(DescTools)
+library(SOILmilaR)
 
 # 30-point transect
 x30 <- BinomCI(1:30, 30, conf.level = 0.8)
 plot(1:30, x30[, 1], xlim = c(0, 30), ylim = c(0, 1))
 lines(1:30, x30[, 2])
 lines(1:30, x30[, 3])
+
+BinomVarNorm(15, x30[,1])
 
 # 10-point transect
 x10 <- BinomCI(1:10, 10, conf.level = 0.8)

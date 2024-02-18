@@ -7,7 +7,7 @@
 BinomVarNorm(n, p_values, alpha = 0.05)
 }
 \arguments{
-\item{n}{integer. Number of trials per experiment}
+\item{n}{integer. Number of trials per experiment.}
 
 \item{p_values}{numeric. Probability of success for each experiment.}
 
@@ -17,8 +17,10 @@ BinomVarNorm(n, p_values, alpha = 0.05)
 This method calculates pooled variance for related binomial experiments with confidence intervals. It relies on the normal approximation / Central Limit Theorem to develop a confidence interval each binomial probability in the vector \code{p_values}. In order for this assumption to work well, \code{n} should be large. The method adjusts the calculated binomial variance to account for the normal approximation confidence interval, and then calculates pooled variance across all experiments.
 }
 \examples{
-n <- 10
-p_values <- c(0.2, 0.3, 0.4)
 
-BinomVarNorm(n, p_values)
+n <- c(10, 5, 30)
+p_values <- c(0.2, 0.3, 0.4)
+alpha <- 0.05
+
+BinomVarNorm(n, p_values, alpha)
 }

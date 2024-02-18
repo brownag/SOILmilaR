@@ -17,6 +17,7 @@ Suggests:
     aqp,
     soilDB,
     sharpshootR,
+    DescTools,
     dplyr,
     knitr,
     rmarkdown, 
