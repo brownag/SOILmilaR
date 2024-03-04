@@ -16,6 +16,8 @@
 #' @return A _data.frame_ containing inputs and two new columns: `similar_dist` (cumulative sum of differences relative to dominant condition), `similar` (logical)
 #' @export
 #'
+#' @references Norfleet, M.L. and Eppinette, R.T. (1993), A Mathematical Model for Determining Similar and Contrasting Inclusions for Map Unit Descriptons. Soil Survey Horizons, 34: 4-5. <https://doi.org/10.2136/sh1993.1.0004>
+#'
 #' @examplesIf !inherits(try(requireNamespace("aqp", quietly=TRUE) && requireNamespace("dplyr", quietly=TRUE) && requireNamespace("cluster", quietly=TRUE), silent=TRUE), 'try-error')
 #' set.seed(456)
 #'

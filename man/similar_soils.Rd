@@ -107,3 +107,6 @@ d2$height <- d2$height + 0.2 # fudge factor for 0-distance
 plot(stats::as.dendrogram(d2), center=TRUE, type="triangle")
 \dontshow{\}) # examplesIf}
 }
+\references{
+Norfleet, M.L. and Eppinette, R.T. (1993), A Mathematical Model for Determining Similar and Contrasting Inclusions for Map Unit Descriptons. Soil Survey Horizons, 34: 4-5. \url{https://doi.org/10.2136/sh1993.1.0004}
+}
