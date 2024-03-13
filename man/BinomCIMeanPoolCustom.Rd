@@ -4,7 +4,7 @@
 \alias{BinomCIMeanPoolCustom}
 \title{Calculate confidence interval for the mean of binomial probabilities using pooled variance}
 \usage{
-BinomCIMeanPoolCustom(x, n, alpha = 0.2)
+BinomCIMeanPoolCustom(x, n, alpha = 0.05)
 }
 \arguments{
 \item{x}{matrix or numeric. First column of the matrix, or the numeric vector, should represent the estimated binomial proportion for each experiment.}
