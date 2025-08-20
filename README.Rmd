@@ -48,17 +48,7 @@ Then we apply a subset of taxonomic rules for loamy soils to assign a taxonomic 
 ```{r example}
 library(SOILmilaR)
 
-set.seed(123)
-x <- do.call('rbind', lapply(1:3, \(i) data.frame(id = paste0(LETTERS[1:10], i), 
-                                                  depth = runif(10, 35, 150), 
-                                                  pscs_clay = c(runif(4, 18, 35), runif(6, 14, 18)), 
-                                                  pscs_frags = c(runif(3, 0, 15), runif(4, 10, 34), runif(3, 35, 60) + c(0, 40, 0)))))
-x$taxpartsize <- interaction(cut(x$pscs_clay, c(0, 18, 35, 60, 100)),
-                             cut(x$pscs_frags, c(0, 35, 90, 100)), drop = TRUE)
-x$taxpartsize <- match(as.character(x$taxpartsize), c("(0,18].(0,35]", "(18,35].(0,35]", "(0,18].(35,90]", "(18,35].(35,90]"))
-x$taxpartsize <- c("coarse-loamy", "fine-loamy", "loamy-skeletal", "loamy-skeletal")[x$taxpartsize]
-x$taxpartsize[x$depth <= 50] <- "loamy"
-x$taxpartsize[x$pscs_frags > 90] <- "fragmental"
+data("loamy", package = "SOILmilaR")
 ```
 
 
@@ -103,7 +93,7 @@ m <- list(taxpartsize = rate_taxpartsize,
           depth = rate_depthclass,
           pscs_clay = rate_pscs_clay)
 
-s <- similar_soils(x, m)
+s <- similar_soils(loamy, m)
 ```
 
 Here we inspect the tabular output of a single run.
@@ -122,14 +112,13 @@ d$height <- d$height + 0.2 # fudge factor for 0-distance
 plot(stats::as.dendrogram(d), center = TRUE, type = "triangle")
 ```
 
-
 If we set `absolute=FALSE` then the differences between soils can be negative, which can help with processing ratings that are ordinal in nature.
 
 ```{r}
 # allow relative contrast ratings to be negative
 # (i.e. ordinal factors, concept of "limiting")
 # absolute value is still used for "similar" threshold
-s2 <- similar_soils(x, m, absolute = FALSE)
+s2 <- similar_soils(loamy, m, absolute = FALSE)
 
 # inspect distances unsing agglomerative clustering+dendrogram
 d2 <- cluster::agnes(s2[, 5, drop = FALSE], method = "gaverage")
@@ -145,7 +134,7 @@ A higher-level wrapper function around `similar_soils()` is `design_mapunit()`. 
 Here we use the same input data.frame and rating function.
 
 ```{r}
-d <- design_mapunit(x, m)
+d <- design_mapunit(loamy, m)
 
 d[order(d$component), ]
 
@@ -157,7 +146,7 @@ If we assume that the collection observations in `x` are spatially representativ
 A literal interpretation of this output would result in a map unit with 5 groups of similar soils, of which 4 could be major components. Alpha appears to be dominant, Beta and Gamma are co-dominant in second place, Delta and Epsilon are dissimilar, limiting, and very strongly contrasting, with Epsilon as a minor component.
 
 ```{r}
-apply(d[2:4], 2, \(dd) {
+apply(d[3:5], 2, \(dd) {
   aggregate(dd, by = list(component = d$component), quantile)
 })
 ```
@@ -171,3 +160,5 @@ If we summarize the properties of the resulting groups, we have:
  - Epsilon: moderately deep to deep, fragmental
 
 Depending on the context of where these soils occur within the mapunit, one may opt to further combine (or perhaps split out) unique conditions as the pertain to unique soil properties, landforms, and vegetation.
+
+Also, perhaps some of the rating functions could be adjusted. If Beta and Gamma appear too similar, the rating groups that split coarse and fine loamy could be combined.

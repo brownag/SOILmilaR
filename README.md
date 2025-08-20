@@ -49,17 +49,7 @@ taxonomic particle size class.
 ``` r
 library(SOILmilaR)
 
-set.seed(123)
-x <- do.call('rbind', lapply(1:3, \(i) data.frame(id = paste0(LETTERS[1:10], i), 
-                                                  depth = runif(10, 35, 150), 
-                                                  pscs_clay = c(runif(4, 18, 35), runif(6, 14, 18)), 
-                                                  pscs_frags = c(runif(3, 0, 15), runif(4, 10, 34), runif(3, 35, 60) + c(0, 40, 0)))))
-x$taxpartsize <- interaction(cut(x$pscs_clay, c(0, 18, 35, 60, 100)),
-                             cut(x$pscs_frags, c(0, 35, 90, 100)), drop = TRUE)
-x$taxpartsize <- match(as.character(x$taxpartsize), c("(0,18].(0,35]", "(18,35].(0,35]", "(0,18].(35,90]", "(18,35].(35,90]"))
-x$taxpartsize <- c("coarse-loamy", "fine-loamy", "loamy-skeletal", "loamy-skeletal")[x$taxpartsize]
-x$taxpartsize[x$depth <= 50] <- "loamy"
-x$taxpartsize[x$pscs_frags > 90] <- "fragmental"
+data("loamy", package = "SOILmilaR")
 ```
 
 Then we create some rating functions for properties of interest.
@@ -107,7 +97,7 @@ m <- list(taxpartsize = rate_taxpartsize,
           depth = rate_depthclass,
           pscs_clay = rate_pscs_clay)
 
-s <- similar_soils(x, m)
+s <- similar_soils(loamy, m)
 #> comparing to dominant reference condition (`7.deep.(18,35]` on 7 rows)
 ```
 
@@ -154,7 +144,7 @@ nature.
 # allow relative contrast ratings to be negative
 # (i.e. ordinal factors, concept of "limiting")
 # absolute value is still used for "similar" threshold
-s2 <- similar_soils(x, m, absolute = FALSE)
+s2 <- similar_soils(loamy, m, absolute = FALSE)
 #> comparing to dominant reference condition (`7.deep.(18,35]` on 7 rows)
 
 # inspect distances unsing agglomerative clustering+dendrogram
@@ -176,40 +166,40 @@ grouped.
 Here we use the same input data.frame and rating function.
 
 ``` r
-d <- design_mapunit(x, m)
+d <- design_mapunit(loamy, m)
 
 d[order(d$component), ]
-#>    id     depth pscs_clay pscs_frags    taxpartsize component
-#> 1  A1  68.07141  34.26617 13.3430897     fine-loamy     Alpha
-#> 2  B1 125.65509  25.70668 10.3920511     fine-loamy     Alpha
-#> 3  C1  82.03235  29.51870  9.6076022     fine-loamy     Alpha
-#> 4  D1 136.54700  27.73477 33.8624746     fine-loamy     Alpha
-#> 11 A2 145.74779  20.42760  0.6874675     fine-loamy     Alpha
-#> 12 B2 138.76439  25.04729  6.6330011     fine-loamy     Alpha
-#> 13 C2 114.43111  25.03331 11.9838727     fine-loamy     Alpha
-#> 14 D2 126.47875  24.27037 12.9255822     fine-loamy     Alpha
-#> 21 A3 111.48825  30.82608  3.6542921     fine-loamy     Alpha
-#> 23 C3  79.15651  30.07310  6.2647017     fine-loamy     Alpha
-#> 24 D3  66.55412  18.01062 28.9167000     fine-loamy     Alpha
-#> 8  H1 137.62819  14.16824 49.8535505 loamy-skeletal      Beta
-#> 9  I1  98.41503  15.31168 82.2289934 loamy-skeletal      Beta
-#> 10 J1  87.51069  17.81801 38.6778412 loamy-skeletal      Beta
-#> 18 H2  59.88691  15.86385 53.8326966 loamy-skeletal      Beta
-#> 20 J2  61.63697  17.43131 44.3615694 loamy-skeletal      Beta
-#> 28 H3 128.42479  16.45108 57.3262779 loamy-skeletal      Beta
-#> 30 J3  85.58064  14.44454 39.3763163 loamy-skeletal      Beta
-#> 6  F1  40.23900  17.59930 27.0047312          loamy     Delta
-#> 15 E2  37.83057  14.60978 23.4627516          loamy     Delta
-#> 22 B3  45.90668  28.69676 10.0208338          loamy     Delta
-#> 19 I2  71.59082  15.06389 97.3761340     fragmental   Epsilon
-#> 29 I3 126.34937  15.40719 97.1617265     fragmental   Epsilon
-#> 5  E1 143.15374  14.41170 25.7369392   coarse-loamy     Gamma
-#> 7  G1  95.73213  14.98435 23.0575846   coarse-loamy     Gamma
-#> 16 F2  89.94654  14.55522 14.9567534   coarse-loamy     Gamma
-#> 17 G2 122.22285  14.93214 13.0607596   coarse-loamy     Gamma
-#> 25 E3 128.68360  15.90127 12.4687515   coarse-loamy     Gamma
-#> 26 F3  86.57938  14.88048 20.4374258   coarse-loamy     Gamma
-#> 27 G3 128.15740  15.51927 33.6389675   coarse-loamy     Gamma
+#>    id    taxpartsize     depth pscs_clay pscs_frags component
+#> 1  A1     fine-loamy  68.07141  34.26617 13.3430897     Alpha
+#> 2  B1     fine-loamy 125.65509  25.70668 10.3920511     Alpha
+#> 3  C1     fine-loamy  82.03235  29.51870  9.6076022     Alpha
+#> 4  D1     fine-loamy 136.54700  27.73477 33.8624746     Alpha
+#> 11 A2     fine-loamy 145.74779  20.42760  0.6874675     Alpha
+#> 12 B2     fine-loamy 138.76439  25.04729  6.6330011     Alpha
+#> 13 C2     fine-loamy 114.43111  25.03331 11.9838727     Alpha
+#> 14 D2     fine-loamy 126.47875  24.27037 12.9255822     Alpha
+#> 21 A3     fine-loamy 111.48825  30.82608  3.6542921     Alpha
+#> 23 C3     fine-loamy  79.15651  30.07310  6.2647017     Alpha
+#> 24 D3     fine-loamy  66.55412  18.01062 28.9167000     Alpha
+#> 8  H1 loamy-skeletal 137.62819  14.16824 49.8535505      Beta
+#> 9  I1 loamy-skeletal  98.41503  15.31168 82.2289934      Beta
+#> 10 J1 loamy-skeletal  87.51069  17.81801 38.6778412      Beta
+#> 18 H2 loamy-skeletal  59.88691  15.86385 53.8326966      Beta
+#> 20 J2 loamy-skeletal  61.63697  17.43131 44.3615694      Beta
+#> 28 H3 loamy-skeletal 128.42479  16.45108 57.3262779      Beta
+#> 30 J3 loamy-skeletal  85.58064  14.44454 39.3763163      Beta
+#> 6  F1          loamy  40.23900  17.59930 27.0047312     Delta
+#> 15 E2          loamy  37.83057  14.60978 23.4627516     Delta
+#> 22 B3          loamy  45.90668  28.69676 10.0208338     Delta
+#> 19 I2     fragmental  71.59082  15.06389 97.3761340   Epsilon
+#> 29 I3     fragmental 126.34937  15.40719 97.1617265   Epsilon
+#> 5  E1   coarse-loamy 143.15374  14.41170 25.7369392     Gamma
+#> 7  G1   coarse-loamy  95.73213  14.98435 23.0575846     Gamma
+#> 16 F2   coarse-loamy  89.94654  14.55522 14.9567534     Gamma
+#> 17 G2   coarse-loamy 122.22285  14.93214 13.0607596     Gamma
+#> 25 E3   coarse-loamy 128.68360  15.90127 12.4687515     Gamma
+#> 26 F3   coarse-loamy  86.57938  14.88048 20.4374258     Gamma
+#> 27 G3   coarse-loamy 128.15740  15.51927 33.6389675     Gamma
 
 sort(prop.table(table(d$component)), decreasing = TRUE)
 #> 
@@ -229,7 +219,7 @@ Delta and Epsilon are dissimilar, limiting, and very strongly
 contrasting, with Epsilon as a minor component.
 
 ``` r
-apply(d[2:4], 2, \(dd) {
+apply(d[3:5], 2, \(dd) {
   aggregate(dd, by = list(component = d$component), quantile)
 })
 #> $depth
@@ -268,3 +258,7 @@ If we summarize the properties of the resulting groups, we have:
 Depending on the context of where these soils occur within the mapunit,
 one may opt to further combine (or perhaps split out) unique conditions
 as the pertain to unique soil properties, landforms, and vegetation.
+
+Also, perhaps some of the rating functions could be adjusted. If Beta
+and Gamma appear too similar, the rating groups that split coarse and
+fine loamy could be combined.
