@@ -113,6 +113,10 @@ similar_soils <- function(
    verbose = TRUE
  ) {
 
+  if (!inherits(x, c("data.frame", "SoilProfileCollection"))) {
+    stop("`x` must be a data.frame or SoilProfileCollection", call. = FALSE)
+  }
+
   if (!missing(thresh)) {
     .Deprecated(msg = "`thresh` argument has been split into `thresh_single` and `thresh_all`, please use one or both instead. Passing `thresh_all=thresh` and `thresh_single=thresh` for backward compatibility.")
     thresh_all <- thresh
@@ -131,6 +135,16 @@ similar_soils <- function(
 
   # calculate interaction of resulting conditions
   ir <- interaction(r)
+
+  nr <- nrow(x)
+  if (nr %in% c(0, 1)) {
+    result <- r
+    result <- cbind(result, data.frame(group = ir,
+                                       similar_single = 0L,
+                                       similar_all = 0L,
+                                       similar = TRUE)[nr,])
+    return(result)
+  }
 
   # use the dominant condition unless otherwise specified
   if (is.null(condition)) {
@@ -167,14 +181,15 @@ similar_soils <- function(
     .absfun <- function(x) x
 
   ex[] <- lapply(seq_along(names(ex)), function(y) {
-    .absfun(ex[[y]] - en[[y]][1])
+    .absfun(as.integer(ex[[y]]) - as.integer(en[[y]][1]))
   })
 
   r$similar_dist <- 0
   r$similar_single <- 0
 
-  r$similar_single[which(lex)] <- apply(ex, MARGIN = 1, max)
+  r$group <- ir
   r$similar_dist[which(lex)] <- rowSums(ex)
+  r$similar_single[which(lex)] <- apply(ex, MARGIN = 1, max)
   r$similar <- ((abs(r$similar_dist) < thresh_all) & (abs(r$similar_single) < thresh_single))
   r <- data.frame(x[idname], r)
 
@@ -182,8 +197,10 @@ similar_soils <- function(
 }
 
 .rate_fun <- function(x, mapping) {
-  as.data.frame(sapply(names(mapping), \(y) {
+  res <- lapply(names(mapping), \(y) {
     mapping[[y]](x[[y]])
-  }))
+  })
+  names(res) <- names(mapping)
+  as.data.frame(res)
 }
 
