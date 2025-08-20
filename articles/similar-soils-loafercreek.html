@@ -143,7 +143,7 @@ populated in NASIS.</p>
 <span></span>
 <span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/similar_soils.html">similar_soils</a></span><span class="op">(</span><span class="va">spc</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>dp <span class="op">=</span> <span class="va">rate_depthclass</span>,</span>
 <span>                             taxpartsize <span class="op">=</span> <span class="va">rate_taxpartsize</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; comparing to dominant reference condition (`3.7` on 17 rows)</span></span>
+<span><span class="co">#&gt; comparing to dominant reference condition (`moderately deep.7` on 17 rows)</span></span>
 <span></span>
 <span><span class="co"># transfer some ordinal ratings</span></span>
 <span><span class="va">spc</span><span class="op">$</span><span class="va">rd</span> <span class="op">=</span> <span class="va">s</span><span class="op">$</span><span class="va">dp</span> <span class="co"># depth class</span></span>
@@ -221,7 +221,7 @@ quantities we replaced them with.</p>
 <th align="left">taxpartsize</th>
 <th align="right">rt</th>
 <th align="right">dp</th>
-<th align="right">rd</th>
+<th align="left">rd</th>
 <th align="right">pc</th>
 <th align="right">pf</th>
 </tr></thead>
@@ -231,7 +231,7 @@ quantities we replaced them with.</p>
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">74</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">27.14000</td>
 <td align="right">4.60000</td>
 </tr>
@@ -240,7 +240,7 @@ quantities we replaced them with.</p>
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">64</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">29.46000</td>
 <td align="right">15.76000</td>
 </tr>
@@ -249,7 +249,7 @@ quantities we replaced them with.</p>
 <td align="left">loamy-skeletal</td>
 <td align="right">13</td>
 <td align="right">66</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">23.95652</td>
 <td align="right">65.26829</td>
 </tr>
@@ -258,7 +258,7 @@ quantities we replaced them with.</p>
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">81</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">27.12500</td>
 <td align="right">26.25000</td>
 </tr>
@@ -267,7 +267,7 @@ quantities we replaced them with.</p>
 <td align="left">loamy-skeletal</td>
 <td align="right">13</td>
 <td align="right">63</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">28.80000</td>
 <td align="right">54.42000</td>
 </tr>
@@ -276,7 +276,7 @@ quantities we replaced them with.</p>
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">66</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">30.72000</td>
 <td align="right">17.36000</td>
 </tr>
@@ -285,7 +285,7 @@ quantities we replaced them with.</p>
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">93</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">23.76000</td>
 <td align="right">6.64000</td>
 </tr>
@@ -294,7 +294,7 @@ quantities we replaced them with.</p>
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">76</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">18.58000</td>
 <td align="right">27.98000</td>
 </tr>
@@ -303,7 +303,7 @@ quantities we replaced them with.</p>
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">71</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">15.42000</td>
 <td align="right">20.38000</td>
 </tr>
@@ -312,7 +312,7 @@ quantities we replaced them with.</p>
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">60</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">34.00000</td>
 <td align="right">30.00000</td>
 </tr>
@@ -321,7 +321,7 @@ quantities we replaced them with.</p>
 <td align="left">loamy-skeletal</td>
 <td align="right">13</td>
 <td align="right">50</td>
-<td align="right">2</td>
+<td align="left">shallow</td>
 <td align="right">26.00000</td>
 <td align="right">50.00000</td>
 </tr>
@@ -330,7 +330,7 @@ quantities we replaced them with.</p>
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">56</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">29.36842</td>
 <td align="right">31.05263</td>
 </tr>
@@ -339,7 +339,7 @@ quantities we replaced them with.</p>
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">65</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">28.82000</td>
 <td align="right">17.20000</td>
 </tr>
@@ -348,7 +348,7 @@ quantities we replaced them with.</p>
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">64</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">NaN</td>
 <td align="right">0.00000</td>
 </tr>
@@ -357,7 +357,7 @@ quantities we replaced them with.</p>
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">61</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">NaN</td>
 <td align="right">15.00000</td>
 </tr>
@@ -366,7 +366,7 @@ quantities we replaced them with.</p>
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">78</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">24.86000</td>
 <td align="right">9.28000</td>
 </tr>
@@ -375,7 +375,7 @@ quantities we replaced them with.</p>
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">72</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">31.04000</td>
 <td align="right">13.56000</td>
 </tr>
@@ -384,7 +384,7 @@ quantities we replaced them with.</p>
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">73</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">17.54167</td>
 <td align="right">0.00000</td>
 </tr>
@@ -393,7 +393,7 @@ quantities we replaced them with.</p>
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">75</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">31.84000</td>
 <td align="right">2.00000</td>
 </tr>
@@ -402,7 +402,7 @@ quantities we replaced them with.</p>
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">60</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">20.96000</td>
 <td align="right">24.00000</td>
 </tr>
@@ -461,20 +461,16 @@ objects, plotting of the associated distance matrices with
 <span></span>
 <span><span class="co"># the simplest model uses the particle size family and the depth class</span></span>
 <span><span class="va">m0</span> <span class="op">&lt;-</span> <span class="fu">.CLUSTERFUN</span><span class="op">(</span><span class="va">x0</span>, <span class="va">spc</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in cluster::daisy(y, metric = "gower"): binary variable(s) 2 treated as</span></span>
-<span><span class="co">#&gt; interval scaled</span></span>
 <span><span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/plotProfileDendrogram.html" class="external-link">plotProfileDendrogram</a></span><span class="op">(</span><span class="va">spc</span>, <span class="va">m0</span>, name <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
 <p><img src="similar-soils-loafercreek_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#</span></span>
 <span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu">.CLUSTERFUN</span><span class="op">(</span><span class="va">x1</span>, <span class="va">spc</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in cluster::daisy(y, metric = "gower"): binary variable(s) 1, 2 treated</span></span>
-<span><span class="co">#&gt; as interval scaled</span></span>
+<span><span class="co">#&gt; Warning in cluster::daisy(y, metric = "gower"): binary variable(s) 1 treated as</span></span>
+<span><span class="co">#&gt; interval scaled</span></span>
 <span><span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/plotProfileDendrogram.html" class="external-link">plotProfileDendrogram</a></span><span class="op">(</span><span class="va">spc</span>, <span class="va">m1</span>, name <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu">.CLUSTERFUN</span><span class="op">(</span><span class="va">x2</span>, <span class="va">spc</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in cluster::daisy(y, metric = "gower"): binary variable(s) 3 treated as</span></span>
-<span><span class="co">#&gt; interval scaled</span></span>
 <span><span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/plotProfileDendrogram.html" class="external-link">plotProfileDendrogram</a></span><span class="op">(</span><span class="va">spc</span>, <span class="va">m2</span>, name <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
 <p><img src="similar-soils-loafercreek_files/figure-html/unnamed-chunk-12-2.png" width="672" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
@@ -486,8 +482,8 @@ objects, plotting of the associated distance matrices with
 arguments you would supply to <code><a href="https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html" class="external-link">aqp::plotSPC()</a></code>.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m4</span> <span class="op">&lt;-</span> <span class="fu">.CLUSTERFUN</span><span class="op">(</span><span class="va">x4</span>, <span class="va">spc</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in cluster::daisy(y, metric = "gower"): binary variable(s) 1, 2 treated</span></span>
-<span><span class="co">#&gt; as interval scaled</span></span>
+<span><span class="co">#&gt; Warning in cluster::daisy(y, metric = "gower"): binary variable(s) 1 treated as</span></span>
+<span><span class="co">#&gt; interval scaled</span></span>
 <span><span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/plotProfileDendrogram.html" class="external-link">plotProfileDendrogram</a></span><span class="op">(</span></span>
 <span>  <span class="va">spc</span>,</span>
 <span>  <span class="va">m4</span>,</span>
@@ -501,8 +497,8 @@ arguments you would supply to <code><a href="https://rdrr.io/pkg/aqp/man/SoilPro
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">m5</span> <span class="op">&lt;-</span> <span class="fu">.CLUSTERFUN</span><span class="op">(</span><span class="va">x5</span>, <span class="va">spc</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in cluster::daisy(y, metric = "gower"): binary variable(s) 1, 2 treated</span></span>
-<span><span class="co">#&gt; as interval scaled</span></span>
+<span><span class="co">#&gt; Warning in cluster::daisy(y, metric = "gower"): binary variable(s) 1 treated as</span></span>
+<span><span class="co">#&gt; interval scaled</span></span>
 <span><span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/plotProfileDendrogram.html" class="external-link">plotProfileDendrogram</a></span><span class="op">(</span></span>
 <span>  <span class="va">spc</span>,</span>
 <span>  <span class="va">m5</span>,</span>
@@ -513,13 +509,24 @@ arguments you would supply to <code><a href="https://rdrr.io/pkg/aqp/man/SoilPro
 <span>  color <span class="op">=</span> <span class="st">"fragvoltot"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="similar-soils-loafercreek_files/figure-html/unnamed-chunk-13-2.png" width="672" style="display: block; margin: auto;"></p>
-<table class="table">
+<table style="width:100%;" class="table">
+<colgroup>
+<col width="10%">
+<col width="22%">
+<col width="4%">
+<col width="4%">
+<col width="23%">
+<col width="13%">
+<col width="13%">
+<col width="4%">
+<col width="4%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">peiid</th>
 <th align="left">taxpartsize</th>
 <th align="right">rt</th>
 <th align="right">dp</th>
-<th align="right">rd</th>
+<th align="left">rd</th>
 <th align="right">pc</th>
 <th align="right">pf</th>
 <th align="right">mc</th>
@@ -531,7 +538,7 @@ arguments you would supply to <code><a href="https://rdrr.io/pkg/aqp/man/SoilPro
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">74</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">27.14000</td>
 <td align="right">4.60000</td>
 <td align="right">35</td>
@@ -542,7 +549,7 @@ arguments you would supply to <code><a href="https://rdrr.io/pkg/aqp/man/SoilPro
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">64</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">29.46000</td>
 <td align="right">15.76000</td>
 <td align="right">38</td>
@@ -553,7 +560,7 @@ arguments you would supply to <code><a href="https://rdrr.io/pkg/aqp/man/SoilPro
 <td align="left">loamy-skeletal</td>
 <td align="right">13</td>
 <td align="right">66</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">23.95652</td>
 <td align="right">65.26829</td>
 <td align="right">25</td>
@@ -564,7 +571,7 @@ arguments you would supply to <code><a href="https://rdrr.io/pkg/aqp/man/SoilPro
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">81</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">27.12500</td>
 <td align="right">26.25000</td>
 <td align="right">30</td>
@@ -575,7 +582,7 @@ arguments you would supply to <code><a href="https://rdrr.io/pkg/aqp/man/SoilPro
 <td align="left">loamy-skeletal</td>
 <td align="right">13</td>
 <td align="right">63</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">28.80000</td>
 <td align="right">54.42000</td>
 <td align="right">35</td>
@@ -586,7 +593,7 @@ arguments you would supply to <code><a href="https://rdrr.io/pkg/aqp/man/SoilPro
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">66</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">30.72000</td>
 <td align="right">17.36000</td>
 <td align="right">39</td>
@@ -597,7 +604,7 @@ arguments you would supply to <code><a href="https://rdrr.io/pkg/aqp/man/SoilPro
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">93</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">23.76000</td>
 <td align="right">6.64000</td>
 <td align="right">26</td>
@@ -608,7 +615,7 @@ arguments you would supply to <code><a href="https://rdrr.io/pkg/aqp/man/SoilPro
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">76</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">18.58000</td>
 <td align="right">27.98000</td>
 <td align="right">20</td>
@@ -619,7 +626,7 @@ arguments you would supply to <code><a href="https://rdrr.io/pkg/aqp/man/SoilPro
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">71</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">15.42000</td>
 <td align="right">20.38000</td>
 <td align="right">19</td>
@@ -630,7 +637,7 @@ arguments you would supply to <code><a href="https://rdrr.io/pkg/aqp/man/SoilPro
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">60</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">34.00000</td>
 <td align="right">30.00000</td>
 <td align="right">34</td>
@@ -641,7 +648,7 @@ arguments you would supply to <code><a href="https://rdrr.io/pkg/aqp/man/SoilPro
 <td align="left">loamy-skeletal</td>
 <td align="right">13</td>
 <td align="right">50</td>
-<td align="right">2</td>
+<td align="left">shallow</td>
 <td align="right">26.00000</td>
 <td align="right">50.00000</td>
 <td align="right">26</td>
@@ -652,7 +659,7 @@ arguments you would supply to <code><a href="https://rdrr.io/pkg/aqp/man/SoilPro
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">56</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">29.36842</td>
 <td align="right">31.05263</td>
 <td align="right">36</td>
@@ -663,7 +670,7 @@ arguments you would supply to <code><a href="https://rdrr.io/pkg/aqp/man/SoilPro
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">65</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">28.82000</td>
 <td align="right">17.20000</td>
 <td align="right">31</td>
@@ -674,7 +681,7 @@ arguments you would supply to <code><a href="https://rdrr.io/pkg/aqp/man/SoilPro
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">78</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">24.86000</td>
 <td align="right">9.28000</td>
 <td align="right">30</td>
@@ -685,7 +692,7 @@ arguments you would supply to <code><a href="https://rdrr.io/pkg/aqp/man/SoilPro
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">72</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">31.04000</td>
 <td align="right">13.56000</td>
 <td align="right">37</td>
@@ -696,7 +703,7 @@ arguments you would supply to <code><a href="https://rdrr.io/pkg/aqp/man/SoilPro
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">73</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">17.54167</td>
 <td align="right">0.00000</td>
 <td align="right">18</td>
@@ -707,7 +714,7 @@ arguments you would supply to <code><a href="https://rdrr.io/pkg/aqp/man/SoilPro
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">75</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">31.84000</td>
 <td align="right">2.00000</td>
 <td align="right">44</td>
@@ -718,7 +725,7 @@ arguments you would supply to <code><a href="https://rdrr.io/pkg/aqp/man/SoilPro
 <td align="left">fine-loamy</td>
 <td align="right">7</td>
 <td align="right">60</td>
-<td align="right">3</td>
+<td align="left">moderately deep</td>
 <td align="right">20.96000</td>
 <td align="right">24.00000</td>
 <td align="right">24</td>

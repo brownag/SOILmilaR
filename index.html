@@ -57,9 +57,10 @@
 <div class="page-header"><h1 id="soilmilar">SOILmilaR<a class="anchor" aria-label="anchor" href="#soilmilar"></a>
 </h1></div>
 <!-- badges: start -->
-<!-- badges: end -->
+
 <p>The goal of {SOILmilaR} is to provide methods for applying standardized, customizable “similar soils” rules to site-level data derived from various sources.</p>
-<p>The main method in this package to implement this method is <code><a href="reference/similar_soils.html">similar_soils()</a></code>. It follows the process outlined in Norfleet &amp; Eppinette (1993):</p>
+<p>The core function to implement this method is <code><a href="reference/similar_soils.html">similar_soils()</a></code>, which compares a set of soils against one soil type or combination of soil conditions. <code><a href="reference/similar_soils.html">similar_soils()</a></code> can be called iteratively using the <code><a href="reference/design_mapunit.html">design_mapunit()</a></code> function.</p>
+<p>The method generally follows the process outlined in Norfleet &amp; Eppinette (1993):</p>
 <blockquote>
 <p>Norfleet, M.L. and Eppinette, R.T. (1993), A Mathematical Model for Determining Similar and Contrasting Inclusions for Map Unit Descriptons. Soil Survey Horizons, 34: 4-5. <a href="https://doi.org/10.2136/sh1993.1.0004" class="external-link uri">https://doi.org/10.2136/sh1993.1.0004</a></p>
 </blockquote>
@@ -74,30 +75,35 @@
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>This is a basic example which shows you how to solve a common problem:</p>
+<p>This is an example that shows you how <code><a href="reference/similar_soils.html">similar_soils()</a></code> works.</p>
+<p>First we generate a synthetic data set using random soil depths across a range of depth classes, as well as random particle size control section clay content and fragments.</p>
+<p>Then we apply a subset of taxonomic rules for loamy soils to assign a taxonomic particle size class.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://github.com/brownag/SOILmilaR" class="external-link">SOILmilaR</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">456</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="st">'rbind'</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, \<span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>, <span class="va">i</span><span class="op">)</span>,</span>
-<span>  taxpartsize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fine-loamy"</span>, <span class="st">"loamy"</span>, <span class="st">"fine-loamy"</span>, <span class="st">"fine-loamy"</span>,</span>
-<span>                  <span class="st">"coarse-loamy"</span>, <span class="st">"coarse-loamy"</span>, <span class="st">"coarse-loamy"</span>, <span class="st">"loamy-skeletal"</span>,</span>
-<span>                  <span class="st">"loamy-skeletal"</span>, <span class="st">"loamy-skeletal"</span><span class="op">)</span>,</span>
-<span>  depth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">35</span>, <span class="fl">150</span><span class="op">)</span>,</span>
-<span>  pscs_clay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">18</span>, <span class="fl">35</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">14</span>, <span class="fl">18</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  pscs_frags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">0</span>, <span class="fl">15</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">10</span>, <span class="fl">34</span><span class="op">)</span>,</span>
-<span>                 <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">35</span>, <span class="fl">60</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">40</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">rate_taxpartsize</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="co"># TODO: this is just made up logic for this example and needs to be updated</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_match.html" class="external-link">case_match</a></span><span class="op">(</span><span class="va">x</span>,</span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="st">'rbind'</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, \<span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>, <span class="va">i</span><span class="op">)</span>, </span>
+<span>                                                  depth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">35</span>, <span class="fl">150</span><span class="op">)</span>, </span>
+<span>                                                  pscs_clay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">18</span>, <span class="fl">35</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">14</span>, <span class="fl">18</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>                                                  pscs_frags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">0</span>, <span class="fl">15</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">10</span>, <span class="fl">34</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">35</span>, <span class="fl">60</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">40</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">x</span><span class="op">$</span><span class="va">taxpartsize</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/interaction.html" class="external-link">interaction</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">pscs_clay</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">18</span>, <span class="fl">35</span>, <span class="fl">60</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                             <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">pscs_frags</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">35</span>, <span class="fl">90</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">x</span><span class="op">$</span><span class="va">taxpartsize</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">taxpartsize</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"(0,18].(0,35]"</span>, <span class="st">"(18,35].(0,35]"</span>, <span class="st">"(0,18].(35,90]"</span>, <span class="st">"(18,35].(35,90]"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">x</span><span class="op">$</span><span class="va">taxpartsize</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"coarse-loamy"</span>, <span class="st">"fine-loamy"</span>, <span class="st">"loamy-skeletal"</span>, <span class="st">"loamy-skeletal"</span><span class="op">)</span><span class="op">[</span><span class="va">x</span><span class="op">$</span><span class="va">taxpartsize</span><span class="op">]</span></span>
+<span><span class="va">x</span><span class="op">$</span><span class="va">taxpartsize</span><span class="op">[</span><span class="va">x</span><span class="op">$</span><span class="va">depth</span> <span class="op">&lt;=</span> <span class="fl">50</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"loamy"</span></span>
+<span><span class="va">x</span><span class="op">$</span><span class="va">taxpartsize</span><span class="op">[</span><span class="va">x</span><span class="op">$</span><span class="va">pscs_frags</span> <span class="op">&gt;</span> <span class="fl">90</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"fragmental"</span></span></code></pre></div>
+<p>Then we create some rating functions for properties of interest.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rate_taxpartsize</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_match.html" class="external-link">case_match</a></span><span class="op">(</span><span class="va">x</span>, </span>
 <span>                    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sandy-skeletal"</span><span class="op">)</span> <span class="op">~</span> <span class="fl">1</span>,</span>
-<span>                    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sandy"</span><span class="op">)</span> <span class="op">~</span> <span class="fl">2</span>,</span>
-<span>                    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loamy"</span>, <span class="st">"coarse-loamy"</span>, <span class="st">"coarse-silty"</span><span class="op">)</span> <span class="op">~</span> <span class="fl">3</span>,</span>
-<span>                    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fine-loamy"</span>, <span class="st">"fine-silty"</span><span class="op">)</span> <span class="op">~</span> <span class="fl">4</span>,</span>
-<span>                    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"clayey"</span>, <span class="st">"fine"</span><span class="op">)</span> <span class="op">~</span> <span class="fl">5</span>,</span>
-<span>                    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"very-fine"</span><span class="op">)</span> <span class="op">~</span> <span class="fl">6</span>,</span>
-<span>                    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loamy-skeletal"</span>, <span class="st">"clayey-skeletal"</span><span class="op">)</span> <span class="op">~</span> <span class="fl">7</span><span class="op">)</span></span>
+<span>                    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sandy"</span><span class="op">)</span> <span class="op">~</span> <span class="fl">3</span>,</span>
+<span>                    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loamy"</span>, <span class="st">"coarse-loamy"</span>, <span class="st">"coarse-silty"</span><span class="op">)</span> <span class="op">~</span> <span class="fl">5</span>,</span>
+<span>                    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fine-loamy"</span>, <span class="st">"fine-silty"</span><span class="op">)</span> <span class="op">~</span> <span class="fl">7</span>,</span>
+<span>                    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"clayey"</span>, <span class="st">"fine"</span><span class="op">)</span> <span class="op">~</span> <span class="fl">9</span>,</span>
+<span>                    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"very-fine"</span><span class="op">)</span> <span class="op">~</span> <span class="fl">11</span>,</span>
+<span>                    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loamy-skeletal"</span>, <span class="st">"clayey-skeletal"</span><span class="op">)</span> <span class="op">~</span> <span class="fl">13</span>,</span>
+<span>                    <span class="st">"fragmental"</span> <span class="op">~</span> <span class="fl">15</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="va">rate_depthclass</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>,</span>
@@ -113,45 +119,142 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">res</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">breaks</span><span class="op">)</span>, ordered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="va">rate_pscs_clay</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">breaks</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">27</span>, <span class="fl">40</span>, <span class="fl">60</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="va">rate_pscs_clay</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">breaks</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">35</span>, <span class="fl">60</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">breaks</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">res</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>, ordered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>taxpartsize <span class="op">=</span> <span class="va">rate_taxpartsize</span>,</span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>To run <code><a href="reference/similar_soils.html">similar_soils()</a></code>, we pass a <em>data.frame</em> or <em>SoilProfileCollection</em> as the first argument. The second argument is a named list that provides a mapping between site-level properties and rating functions. The list elements are functions with minimum arguments <code>x</code> and <code>...</code>, and the element names are the corresponding columns.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>taxpartsize <span class="op">=</span> <span class="va">rate_taxpartsize</span>,</span>
 <span>          depth <span class="op">=</span> <span class="va">rate_depthclass</span>,</span>
 <span>          pscs_clay <span class="op">=</span> <span class="va">rate_pscs_clay</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/similar_soils.html">similar_soils</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">m</span><span class="op">)</span></span>
-<span><span class="co">#&gt; comparing to dominant reference condition (`7.3.1` on 6 rows)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   id taxpartsize depth pscs_clay similar_dist similar</span></span>
-<span><span class="co">#&gt; 1 A1           4     2         2            5   FALSE</span></span>
-<span><span class="co">#&gt; 2 B1           3     3         2            5   FALSE</span></span>
-<span><span class="co">#&gt; 3 C1           4     4         3            6   FALSE</span></span>
-<span><span class="co">#&gt; 4 D1           4     4         3            6   FALSE</span></span>
-<span><span class="co">#&gt; 5 E1           3     4         1            5   FALSE</span></span>
-<span><span class="co">#&gt; 6 F1           3     3         1            4   FALSE</span></span>
-<span></span>
-<span><span class="co"># inspect distances using agglomerative clustering+dendrogram</span></span>
+<span><span class="co">#&gt; comparing to dominant reference condition (`7.deep.(18,35]` on 7 rows)</span></span></code></pre></div>
+<p>Here we inspect the tabular output of a single run.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   id taxpartsize           depth pscs_clay similar_dist similar_single</span></span>
+<span><span class="co">#&gt; 1 A1           7 moderately deep   (18,35]            1              1</span></span>
+<span><span class="co">#&gt; 2 B1           7            deep   (18,35]            0              0</span></span>
+<span><span class="co">#&gt; 3 C1           7 moderately deep   (18,35]            1              1</span></span>
+<span><span class="co">#&gt; 4 D1           7            deep   (18,35]            0              0</span></span>
+<span><span class="co">#&gt; 5 E1           5            deep    (0,18]            3              2</span></span>
+<span><span class="co">#&gt; 6 F1           5         shallow    (0,18]            5              2</span></span>
+<span><span class="co">#&gt;                       group similar</span></span>
+<span><span class="co">#&gt; 1 7.moderately deep.(18,35]    TRUE</span></span>
+<span><span class="co">#&gt; 2            7.deep.(18,35]    TRUE</span></span>
+<span><span class="co">#&gt; 3 7.moderately deep.(18,35]    TRUE</span></span>
+<span><span class="co">#&gt; 4            7.deep.(18,35]    TRUE</span></span>
+<span><span class="co">#&gt; 5             5.deep.(0,18]   FALSE</span></span>
+<span><span class="co">#&gt; 6          5.shallow.(0,18]   FALSE</span></span></code></pre></div>
+<p>The rating values can be used as surrogates for the detailed properties for calculating distance.</p>
+<p>Here, we use <code><a href="https://rdrr.io/pkg/cluster/man/agnes.html" class="external-link">cluster::agnes()</a></code> to cluster similar sets of rating values, and render a dendrogram.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># inspect distances using agglomerative clustering+dendrogram</span></span>
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">cluster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/cluster/man/agnes.html" class="external-link">agnes</a></span><span class="op">(</span><span class="va">s</span><span class="op">[</span>, <span class="fl">5</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>, method <span class="op">=</span> <span class="st">"gaverage"</span><span class="op">)</span></span>
 <span><span class="va">d</span><span class="op">$</span><span class="va">height</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">$</span><span class="va">height</span> <span class="op">+</span> <span class="fl">0.2</span> <span class="co"># fudge factor for 0-distance</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/dendrogram.html" class="external-link">as.dendrogram</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span>, center <span class="op">=</span> <span class="cn">TRUE</span>, type <span class="op">=</span> <span class="st">"triangle"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-example-1.png" width="100%"></p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="co"># allow relative contrast ratings to be negative</span></span>
+<p><img src="reference/figures/README-unnamed-chunk-5-1.png" width="100%"></p>
+<p>If we set <code>absolute=FALSE</code> then the differences between soils can be negative, which can help with processing ratings that are ordinal in nature.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># allow relative contrast ratings to be negative</span></span>
 <span><span class="co"># (i.e. ordinal factors, concept of "limiting")</span></span>
 <span><span class="co"># absolute value is still used for "similar" threshold</span></span>
 <span><span class="va">s2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/similar_soils.html">similar_soils</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">m</span>, absolute <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; comparing to dominant reference condition (`7.3.1` on 6 rows)</span></span>
+<span><span class="co">#&gt; comparing to dominant reference condition (`7.deep.(18,35]` on 7 rows)</span></span>
 <span></span>
 <span><span class="co"># inspect distances unsing agglomerative clustering+dendrogram</span></span>
 <span><span class="va">d2</span> <span class="op">&lt;-</span> <span class="fu">cluster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/cluster/man/agnes.html" class="external-link">agnes</a></span><span class="op">(</span><span class="va">s2</span><span class="op">[</span>, <span class="fl">5</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>, method <span class="op">=</span> <span class="st">"gaverage"</span><span class="op">)</span></span>
 <span><span class="va">d2</span><span class="op">$</span><span class="va">height</span> <span class="op">&lt;-</span> <span class="va">d2</span><span class="op">$</span><span class="va">height</span> <span class="op">+</span> <span class="fl">0.2</span> <span class="co"># fudge factor for 0-distance</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/dendrogram.html" class="external-link">as.dendrogram</a></span><span class="op">(</span><span class="va">d2</span><span class="op">)</span>, center <span class="op">=</span> <span class="cn">TRUE</span>, type <span class="op">=</span> <span class="st">"triangle"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-example-2.png" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="100%"></p>
+<div class="section level3">
+<h3 id="design_mapunit-function">
+<code>design_mapunit()</code> function<a class="anchor" aria-label="anchor" href="#design_mapunit-function"></a>
+</h3>
+<p>A higher-level wrapper function around <code><a href="reference/similar_soils.html">similar_soils()</a></code> is <code><a href="reference/design_mapunit.html">design_mapunit()</a></code>. It takes the same inputs as <code><a href="reference/similar_soils.html">similar_soils()</a></code> but it processes the data iteratively until there are no data remaining to be grouped.</p>
+<p>Here we use the same input data.frame and rating function.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/design_mapunit.html">design_mapunit</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">m</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">d</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">component</span><span class="op">)</span>, <span class="op">]</span></span>
+<span><span class="co">#&gt;    id     depth pscs_clay pscs_frags    taxpartsize component</span></span>
+<span><span class="co">#&gt; 1  A1  68.07141  34.26617 13.3430897     fine-loamy     Alpha</span></span>
+<span><span class="co">#&gt; 2  B1 125.65509  25.70668 10.3920511     fine-loamy     Alpha</span></span>
+<span><span class="co">#&gt; 3  C1  82.03235  29.51870  9.6076022     fine-loamy     Alpha</span></span>
+<span><span class="co">#&gt; 4  D1 136.54700  27.73477 33.8624746     fine-loamy     Alpha</span></span>
+<span><span class="co">#&gt; 11 A2 145.74779  20.42760  0.6874675     fine-loamy     Alpha</span></span>
+<span><span class="co">#&gt; 12 B2 138.76439  25.04729  6.6330011     fine-loamy     Alpha</span></span>
+<span><span class="co">#&gt; 13 C2 114.43111  25.03331 11.9838727     fine-loamy     Alpha</span></span>
+<span><span class="co">#&gt; 14 D2 126.47875  24.27037 12.9255822     fine-loamy     Alpha</span></span>
+<span><span class="co">#&gt; 21 A3 111.48825  30.82608  3.6542921     fine-loamy     Alpha</span></span>
+<span><span class="co">#&gt; 23 C3  79.15651  30.07310  6.2647017     fine-loamy     Alpha</span></span>
+<span><span class="co">#&gt; 24 D3  66.55412  18.01062 28.9167000     fine-loamy     Alpha</span></span>
+<span><span class="co">#&gt; 8  H1 137.62819  14.16824 49.8535505 loamy-skeletal      Beta</span></span>
+<span><span class="co">#&gt; 9  I1  98.41503  15.31168 82.2289934 loamy-skeletal      Beta</span></span>
+<span><span class="co">#&gt; 10 J1  87.51069  17.81801 38.6778412 loamy-skeletal      Beta</span></span>
+<span><span class="co">#&gt; 18 H2  59.88691  15.86385 53.8326966 loamy-skeletal      Beta</span></span>
+<span><span class="co">#&gt; 20 J2  61.63697  17.43131 44.3615694 loamy-skeletal      Beta</span></span>
+<span><span class="co">#&gt; 28 H3 128.42479  16.45108 57.3262779 loamy-skeletal      Beta</span></span>
+<span><span class="co">#&gt; 30 J3  85.58064  14.44454 39.3763163 loamy-skeletal      Beta</span></span>
+<span><span class="co">#&gt; 6  F1  40.23900  17.59930 27.0047312          loamy     Delta</span></span>
+<span><span class="co">#&gt; 15 E2  37.83057  14.60978 23.4627516          loamy     Delta</span></span>
+<span><span class="co">#&gt; 22 B3  45.90668  28.69676 10.0208338          loamy     Delta</span></span>
+<span><span class="co">#&gt; 19 I2  71.59082  15.06389 97.3761340     fragmental   Epsilon</span></span>
+<span><span class="co">#&gt; 29 I3 126.34937  15.40719 97.1617265     fragmental   Epsilon</span></span>
+<span><span class="co">#&gt; 5  E1 143.15374  14.41170 25.7369392   coarse-loamy     Gamma</span></span>
+<span><span class="co">#&gt; 7  G1  95.73213  14.98435 23.0575846   coarse-loamy     Gamma</span></span>
+<span><span class="co">#&gt; 16 F2  89.94654  14.55522 14.9567534   coarse-loamy     Gamma</span></span>
+<span><span class="co">#&gt; 17 G2 122.22285  14.93214 13.0607596   coarse-loamy     Gamma</span></span>
+<span><span class="co">#&gt; 25 E3 128.68360  15.90127 12.4687515   coarse-loamy     Gamma</span></span>
+<span><span class="co">#&gt; 26 F3  86.57938  14.88048 20.4374258   coarse-loamy     Gamma</span></span>
+<span><span class="co">#&gt; 27 G3 128.15740  15.51927 33.6389675   coarse-loamy     Gamma</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/proportions.html" class="external-link">prop.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">component</span><span class="op">)</span><span class="op">)</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      Alpha       Beta      Gamma      Delta    Epsilon </span></span>
+<span><span class="co">#&gt; 0.36666667 0.23333333 0.23333333 0.10000000 0.06666667</span></span></code></pre></div>
+<p>If we assume that the collection observations in <code>x</code> are spatially representative of the mapunit extent, it is reasonable to consider the resulting proportions to be similar to the abundance represented with component percentages.</p>
+<p>A literal interpretation of this output would result in a map unit with 5 groups of similar soils, of which 4 could be major components. Alpha appears to be dominant, Beta and Gamma are co-dominant in second place, Delta and Epsilon are dissimilar, limiting, and very strongly contrasting, with Epsilon as a minor component.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">d</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>, <span class="fl">2</span>, \<span class="op">(</span><span class="va">dd</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">dd</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>component <span class="op">=</span> <span class="va">d</span><span class="op">$</span><span class="va">component</span><span class="op">)</span>, <span class="va">quantile</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $depth</span></span>
+<span><span class="co">#&gt;   component      x.0%     x.25%     x.50%     x.75%    x.100%</span></span>
+<span><span class="co">#&gt; 1     Alpha  66.55412  80.59443 114.43111 131.51288 145.74779</span></span>
+<span><span class="co">#&gt; 2      Beta  59.88691  73.60880  87.51069 113.41991 137.62819</span></span>
+<span><span class="co">#&gt; 3     Delta  37.83057  39.03479  40.23900  43.07284  45.90668</span></span>
+<span><span class="co">#&gt; 4   Epsilon  71.59082  85.28045  98.97009 112.65973 126.34937</span></span>
+<span><span class="co">#&gt; 5     Gamma  86.57938  92.83933 122.22285 128.42050 143.15374</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $pscs_clay</span></span>
+<span><span class="co">#&gt;   component     x.0%    x.25%    x.50%    x.75%   x.100%</span></span>
+<span><span class="co">#&gt; 1     Alpha 18.01062 24.65184 25.70668 29.79590 34.26617</span></span>
+<span><span class="co">#&gt; 2      Beta 14.16824 14.87811 15.86385 16.94120 17.81801</span></span>
+<span><span class="co">#&gt; 3     Delta 14.60978 16.10454 17.59930 23.14803 28.69676</span></span>
+<span><span class="co">#&gt; 4   Epsilon 15.06389 15.14972 15.23554 15.32137 15.40719</span></span>
+<span><span class="co">#&gt; 5     Gamma 14.41170 14.71785 14.93214 15.25181 15.90127</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $pscs_frags</span></span>
+<span><span class="co">#&gt;   component       x.0%      x.25%      x.50%      x.75%     x.100%</span></span>
+<span><span class="co">#&gt; 1     Alpha  0.6874675  6.4488514 10.3920511 13.1343360 33.8624746</span></span>
+<span><span class="co">#&gt; 2      Beta 38.6778412 41.8689428 49.8535505 55.5794872 82.2289934</span></span>
+<span><span class="co">#&gt; 3     Delta 10.0208338 16.7417927 23.4627516 25.2337414 27.0047312</span></span>
+<span><span class="co">#&gt; 4   Epsilon 97.1617265 97.2153284 97.2689302 97.3225321 97.3761340</span></span>
+<span><span class="co">#&gt; 5     Gamma 12.4687515 14.0087565 20.4374258 24.3972619 33.6389675</span></span></code></pre></div>
+<p>If we summarize the properties of the resulting groups, we have:</p>
+<ul>
+<li>Alpha: moderately deep to deep, loamy-skeletal</li>
+<li>Beta: deep to moderately deep, fine-loamy</li>
+<li>Gamma: deep to moderately deep, coarse-loamy</li>
+<li>Delta: shallow, loamy</li>
+<li>Epsilon: moderately deep to deep, fragmental</li>
+</ul>
+<p>Depending on the context of where these soils occur within the mapunit, one may opt to further combine (or perhaps split out) unique conditions as the pertain to unique soil properties, landforms, and vegetation.</p>
+</div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -184,7 +287,12 @@
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/brownag/SOILmilaR/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/brownag/SOILmilaR/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>

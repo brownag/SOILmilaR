@@ -67,32 +67,21 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://github.com/brownag/SOILmilaR" class="external-link">SOILmilaR</a></span><span class="op">)</span></span></code></pre></div>
-<p>Set pseudorandom number generator seed for consistent results between
-runs (optional).</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span></code></pre></div>
-<p>Next we will generate some sample data representing 5 “synthetic
-transects”.</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://github.com/brownag/SOILmilaR" class="external-link">SOILmilaR</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"loamy"</span>, package <span class="op">=</span> <span class="st">"SOILmilaR"</span><span class="op">)</span></span></code></pre></div>
+<p>The object <code>loamy</code> is a sample data set representing 3
+“synthetic transects”.</p>
 <p>We assume a similar “soil forming function” for these transects
-across each hypothetical “delineation” being transected.</p>
-<p>Here the values have been customized so that taxonomic particle size
-is fine-loamy, but coarser textured in higher fragment material. Soil
-depth varies from shallow to very deep, uniform but centered around
-moderately deep. <code>pscs_*</code> quantities provided for example
-numeric quantities that can be used.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="st">'rbind'</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, \<span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>, <span class="va">i</span><span class="op">)</span>,</span>
-<span>           taxpartsize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fine-loamy"</span>,<span class="st">"loamy"</span>,<span class="st">"fine-loamy"</span>,<span class="st">"fine-loamy"</span>,</span>
-<span>                           <span class="st">"coarse-loamy"</span>, <span class="st">"coarse-loamy"</span>, <span class="st">"coarse-loamy"</span>,</span>
-<span>                           <span class="st">"loamy-skeletal"</span>, <span class="st">"loamy-skeletal"</span>, <span class="st">"loamy-skeletal"</span><span class="op">)</span>,</span>
-<span>           depth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">35</span>, <span class="fl">150</span><span class="op">)</span>,</span>
-<span>           pscs_clay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">18</span>, <span class="fl">35</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">14</span>, <span class="fl">18</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>           pscs_frags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">0</span>, <span class="fl">15</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">10</span>, <span class="fl">34</span><span class="op">)</span>,</span>
-<span>                          <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">35</span>, <span class="fl">60</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">40</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+across each hypothetical “delineation” being transected. Here the values
+have been customized so that taxonomic particle size class is
+fine-loamy, but coarser textured in higher fragment material. Soil depth
+varies from shallow to very deep, uniform but centered around moderately
+deep. <code>pscs_*</code> quantities provided for example numeric
+quantities that can be used.</p>
 <p>Next we define some rating functions for particle size class and
 depth class.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rate_taxpartsize</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_match.html" class="external-link">case_match</a></span><span class="op">(</span><span class="va">x</span>,</span>
 <span>                    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sandy-skeletal"</span><span class="op">)</span> <span class="op">~</span> <span class="fl">1</span>,</span>
@@ -101,7 +90,8 @@ depth class.</p>
 <span>                    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fine-loamy"</span>, <span class="st">"fine-silty"</span><span class="op">)</span> <span class="op">~</span> <span class="fl">7</span>,</span>
 <span>                    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"clayey"</span>, <span class="st">"fine"</span><span class="op">)</span> <span class="op">~</span> <span class="fl">9</span>,</span>
 <span>                    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"very-fine"</span><span class="op">)</span> <span class="op">~</span> <span class="fl">11</span>,</span>
-<span>                    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loamy-skeletal"</span>, <span class="st">"clayey-skeletal"</span><span class="op">)</span> <span class="op">~</span> <span class="fl">13</span><span class="op">)</span></span>
+<span>                    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loamy-skeletal"</span>, <span class="st">"clayey-skeletal"</span><span class="op">)</span> <span class="op">~</span> <span class="fl">13</span>,</span>
+<span>                    <span class="st">"fragmental"</span> <span class="op">~</span> <span class="fl">15</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="va">rate_depthclass</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>,</span>
@@ -124,44 +114,75 @@ applies the rating functions to the columns of the input data
 <code>m</code>, providing the “mapping” of data to rating functions.</p>
 <p>Now we will demonstrate iterative filtering and application of
 similar soils criteria.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>taxpartsize <span class="op">=</span> <span class="va">rate_taxpartsize</span>,</span>
 <span>          depth <span class="op">=</span>  <span class="va">rate_depthclass</span><span class="op">)</span></span>
-<span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">loamy</span></span>
 <span><span class="va">res0</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/similar_soils.html">similar_soils</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">m</span><span class="op">)</span></span>
-<span><span class="co">#&gt; comparing to dominant reference condition (`13.3` on 6 rows)</span></span>
+<span><span class="co">#&gt; comparing to dominant reference condition (`7.deep` on 7 rows)</span></span>
 <span><span class="va">res0</span></span>
-<span><span class="co">#&gt;    id taxpartsize depth similar_dist similar_single similar</span></span>
-<span><span class="co">#&gt; 1  A1           7     3            6              6   FALSE</span></span>
-<span><span class="co">#&gt; 2  B1           5     4            9              8   FALSE</span></span>
-<span><span class="co">#&gt; 3  C1           7     3            6              6   FALSE</span></span>
-<span><span class="co">#&gt; 4  D1           7     4            7              6   FALSE</span></span>
-<span><span class="co">#&gt; 5  E1           5     4            9              8   FALSE</span></span>
-<span><span class="co">#&gt; 6  F1           5     2            9              8   FALSE</span></span>
-<span><span class="co">#&gt; 7  G1           5     3            8              8   FALSE</span></span>
-<span><span class="co">#&gt; 8  H1          13     4            1              1    TRUE</span></span>
-<span><span class="co">#&gt; 9  I1          13     3            0              0    TRUE</span></span>
-<span><span class="co">#&gt; 10 J1          13     3            0              0    TRUE</span></span>
-<span><span class="co">#&gt; 11 A2           7     4            7              6   FALSE</span></span>
-<span><span class="co">#&gt; 12 B2           5     4            9              8   FALSE</span></span>
-<span><span class="co">#&gt; 13 C2           7     4            7              6   FALSE</span></span>
-<span><span class="co">#&gt; 14 D2           7     4            7              6   FALSE</span></span>
-<span><span class="co">#&gt; 15 E2           5     2            9              8   FALSE</span></span>
-<span><span class="co">#&gt; 16 F2           5     3            8              8   FALSE</span></span>
-<span><span class="co">#&gt; 17 G2           5     4            9              8   FALSE</span></span>
-<span><span class="co">#&gt; 18 H2          13     3            0              0    TRUE</span></span>
-<span><span class="co">#&gt; 19 I2          13     3            0              0    TRUE</span></span>
-<span><span class="co">#&gt; 20 J2          13     3            0              0    TRUE</span></span>
-<span><span class="co">#&gt; 21 A3           7     4            7              6   FALSE</span></span>
-<span><span class="co">#&gt; 22 B3           5     2            9              8   FALSE</span></span>
-<span><span class="co">#&gt; 23 C3           7     3            6              6   FALSE</span></span>
-<span><span class="co">#&gt; 24 D3           7     3            6              6   FALSE</span></span>
-<span><span class="co">#&gt; 25 E3           5     4            9              8   FALSE</span></span>
-<span><span class="co">#&gt; 26 F3           5     3            8              8   FALSE</span></span>
-<span><span class="co">#&gt; 27 G3           5     4            9              8   FALSE</span></span>
-<span><span class="co">#&gt; 28 H3          13     4            1              1    TRUE</span></span>
-<span><span class="co">#&gt; 29 I3          13     4            1              1    TRUE</span></span>
-<span><span class="co">#&gt; 30 J3          13     3            0              0    TRUE</span></span></code></pre></div>
+<span><span class="co">#&gt;    id taxpartsize           depth similar_dist similar_single</span></span>
+<span><span class="co">#&gt; 1  A1           7 moderately deep            1              1</span></span>
+<span><span class="co">#&gt; 2  B1           7            deep            0              0</span></span>
+<span><span class="co">#&gt; 3  C1           7 moderately deep            1              1</span></span>
+<span><span class="co">#&gt; 4  D1           7            deep            0              0</span></span>
+<span><span class="co">#&gt; 5  E1           5            deep            2              2</span></span>
+<span><span class="co">#&gt; 6  F1           5         shallow            4              2</span></span>
+<span><span class="co">#&gt; 7  G1           5 moderately deep            3              2</span></span>
+<span><span class="co">#&gt; 8  H1          13            deep            6              6</span></span>
+<span><span class="co">#&gt; 9  I1          13 moderately deep            7              6</span></span>
+<span><span class="co">#&gt; 10 J1          13 moderately deep            7              6</span></span>
+<span><span class="co">#&gt; 11 A2           7            deep            0              0</span></span>
+<span><span class="co">#&gt; 12 B2           7            deep            0              0</span></span>
+<span><span class="co">#&gt; 13 C2           7            deep            0              0</span></span>
+<span><span class="co">#&gt; 14 D2           7            deep            0              0</span></span>
+<span><span class="co">#&gt; 15 E2           5         shallow            4              2</span></span>
+<span><span class="co">#&gt; 16 F2           5 moderately deep            3              2</span></span>
+<span><span class="co">#&gt; 17 G2           5            deep            2              2</span></span>
+<span><span class="co">#&gt; 18 H2          13 moderately deep            7              6</span></span>
+<span><span class="co">#&gt; 19 I2          15 moderately deep            9              8</span></span>
+<span><span class="co">#&gt; 20 J2          13 moderately deep            7              6</span></span>
+<span><span class="co">#&gt; 21 A3           7            deep            0              0</span></span>
+<span><span class="co">#&gt; 22 B3           5         shallow            4              2</span></span>
+<span><span class="co">#&gt; 23 C3           7 moderately deep            1              1</span></span>
+<span><span class="co">#&gt; 24 D3           7 moderately deep            1              1</span></span>
+<span><span class="co">#&gt; 25 E3           5            deep            2              2</span></span>
+<span><span class="co">#&gt; 26 F3           5 moderately deep            3              2</span></span>
+<span><span class="co">#&gt; 27 G3           5            deep            2              2</span></span>
+<span><span class="co">#&gt; 28 H3          13            deep            6              6</span></span>
+<span><span class="co">#&gt; 29 I3          15            deep            8              8</span></span>
+<span><span class="co">#&gt; 30 J3          13 moderately deep            7              6</span></span>
+<span><span class="co">#&gt;                 group similar</span></span>
+<span><span class="co">#&gt; 1   7.moderately deep    TRUE</span></span>
+<span><span class="co">#&gt; 2              7.deep    TRUE</span></span>
+<span><span class="co">#&gt; 3   7.moderately deep    TRUE</span></span>
+<span><span class="co">#&gt; 4              7.deep    TRUE</span></span>
+<span><span class="co">#&gt; 5              5.deep   FALSE</span></span>
+<span><span class="co">#&gt; 6           5.shallow   FALSE</span></span>
+<span><span class="co">#&gt; 7   5.moderately deep   FALSE</span></span>
+<span><span class="co">#&gt; 8             13.deep   FALSE</span></span>
+<span><span class="co">#&gt; 9  13.moderately deep   FALSE</span></span>
+<span><span class="co">#&gt; 10 13.moderately deep   FALSE</span></span>
+<span><span class="co">#&gt; 11             7.deep    TRUE</span></span>
+<span><span class="co">#&gt; 12             7.deep    TRUE</span></span>
+<span><span class="co">#&gt; 13             7.deep    TRUE</span></span>
+<span><span class="co">#&gt; 14             7.deep    TRUE</span></span>
+<span><span class="co">#&gt; 15          5.shallow   FALSE</span></span>
+<span><span class="co">#&gt; 16  5.moderately deep   FALSE</span></span>
+<span><span class="co">#&gt; 17             5.deep   FALSE</span></span>
+<span><span class="co">#&gt; 18 13.moderately deep   FALSE</span></span>
+<span><span class="co">#&gt; 19 15.moderately deep   FALSE</span></span>
+<span><span class="co">#&gt; 20 13.moderately deep   FALSE</span></span>
+<span><span class="co">#&gt; 21             7.deep    TRUE</span></span>
+<span><span class="co">#&gt; 22          5.shallow   FALSE</span></span>
+<span><span class="co">#&gt; 23  7.moderately deep    TRUE</span></span>
+<span><span class="co">#&gt; 24  7.moderately deep    TRUE</span></span>
+<span><span class="co">#&gt; 25             5.deep   FALSE</span></span>
+<span><span class="co">#&gt; 26  5.moderately deep   FALSE</span></span>
+<span><span class="co">#&gt; 27             5.deep   FALSE</span></span>
+<span><span class="co">#&gt; 28            13.deep   FALSE</span></span>
+<span><span class="co">#&gt; 29            15.deep   FALSE</span></span>
+<span><span class="co">#&gt; 30 13.moderately deep   FALSE</span></span></code></pre></div>
 <p>Identifying soils similar to <code>"13.3"</code> (moderately deep,
 skeletal), corresponds to a major, dominant, component in a map
 unit.</p>
@@ -172,34 +193,52 @@ after inspection. If we were to do that we could set, for example,
 automatically selected in this example.</p>
 <p>Next, let’s take the remaining dissimilar soils, and re-apply the
 similarity criteria based on the next-most-dominant condition.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/subset-SoilProfileCollection-method.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">x</span>, <span class="op">!</span><span class="va">res0</span><span class="op">$</span><span class="va">similar</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"taxpartsize"</span>, <span class="st">"depth"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">res1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/similar_soils.html">similar_soils</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">m</span><span class="op">)</span></span>
-<span><span class="co">#&gt; comparing to dominant reference condition (`5.4` on 6 rows)</span></span>
+<span><span class="co">#&gt; comparing to dominant reference condition (`13.moderately deep` on 5 rows)</span></span>
 <span><span class="va">res1</span></span>
-<span><span class="co">#&gt;    id taxpartsize depth similar_dist similar_single similar</span></span>
-<span><span class="co">#&gt; 1  A1           7     3            3              2   FALSE</span></span>
-<span><span class="co">#&gt; 2  B1           5     4            0              0    TRUE</span></span>
-<span><span class="co">#&gt; 3  C1           7     3            3              2   FALSE</span></span>
-<span><span class="co">#&gt; 4  D1           7     4            2              2   FALSE</span></span>
-<span><span class="co">#&gt; 5  E1           5     4            0              0    TRUE</span></span>
-<span><span class="co">#&gt; 6  F1           5     2            2              2   FALSE</span></span>
-<span><span class="co">#&gt; 7  G1           5     3            1              1    TRUE</span></span>
-<span><span class="co">#&gt; 11 A2           7     4            2              2   FALSE</span></span>
-<span><span class="co">#&gt; 12 B2           5     4            0              0    TRUE</span></span>
-<span><span class="co">#&gt; 13 C2           7     4            2              2   FALSE</span></span>
-<span><span class="co">#&gt; 14 D2           7     4            2              2   FALSE</span></span>
-<span><span class="co">#&gt; 15 E2           5     2            2              2   FALSE</span></span>
-<span><span class="co">#&gt; 16 F2           5     3            1              1    TRUE</span></span>
-<span><span class="co">#&gt; 17 G2           5     4            0              0    TRUE</span></span>
-<span><span class="co">#&gt; 21 A3           7     4            2              2   FALSE</span></span>
-<span><span class="co">#&gt; 22 B3           5     2            2              2   FALSE</span></span>
-<span><span class="co">#&gt; 23 C3           7     3            3              2   FALSE</span></span>
-<span><span class="co">#&gt; 24 D3           7     3            3              2   FALSE</span></span>
-<span><span class="co">#&gt; 25 E3           5     4            0              0    TRUE</span></span>
-<span><span class="co">#&gt; 26 F3           5     3            1              1    TRUE</span></span>
-<span><span class="co">#&gt; 27 G3           5     4            0              0    TRUE</span></span></code></pre></div>
+<span><span class="co">#&gt;    id taxpartsize           depth similar_dist similar_single</span></span>
+<span><span class="co">#&gt; 5  E1           5            deep            9              8</span></span>
+<span><span class="co">#&gt; 6  F1           5         shallow            9              8</span></span>
+<span><span class="co">#&gt; 7  G1           5 moderately deep            8              8</span></span>
+<span><span class="co">#&gt; 8  H1          13            deep            1              1</span></span>
+<span><span class="co">#&gt; 9  I1          13 moderately deep            0              0</span></span>
+<span><span class="co">#&gt; 10 J1          13 moderately deep            0              0</span></span>
+<span><span class="co">#&gt; 15 E2           5         shallow            9              8</span></span>
+<span><span class="co">#&gt; 16 F2           5 moderately deep            8              8</span></span>
+<span><span class="co">#&gt; 17 G2           5            deep            9              8</span></span>
+<span><span class="co">#&gt; 18 H2          13 moderately deep            0              0</span></span>
+<span><span class="co">#&gt; 19 I2          15 moderately deep            2              2</span></span>
+<span><span class="co">#&gt; 20 J2          13 moderately deep            0              0</span></span>
+<span><span class="co">#&gt; 22 B3           5         shallow            9              8</span></span>
+<span><span class="co">#&gt; 25 E3           5            deep            9              8</span></span>
+<span><span class="co">#&gt; 26 F3           5 moderately deep            8              8</span></span>
+<span><span class="co">#&gt; 27 G3           5            deep            9              8</span></span>
+<span><span class="co">#&gt; 28 H3          13            deep            1              1</span></span>
+<span><span class="co">#&gt; 29 I3          15            deep            3              2</span></span>
+<span><span class="co">#&gt; 30 J3          13 moderately deep            0              0</span></span>
+<span><span class="co">#&gt;                 group similar</span></span>
+<span><span class="co">#&gt; 5              5.deep   FALSE</span></span>
+<span><span class="co">#&gt; 6           5.shallow   FALSE</span></span>
+<span><span class="co">#&gt; 7   5.moderately deep   FALSE</span></span>
+<span><span class="co">#&gt; 8             13.deep    TRUE</span></span>
+<span><span class="co">#&gt; 9  13.moderately deep    TRUE</span></span>
+<span><span class="co">#&gt; 10 13.moderately deep    TRUE</span></span>
+<span><span class="co">#&gt; 15          5.shallow   FALSE</span></span>
+<span><span class="co">#&gt; 16  5.moderately deep   FALSE</span></span>
+<span><span class="co">#&gt; 17             5.deep   FALSE</span></span>
+<span><span class="co">#&gt; 18 13.moderately deep    TRUE</span></span>
+<span><span class="co">#&gt; 19 15.moderately deep   FALSE</span></span>
+<span><span class="co">#&gt; 20 13.moderately deep    TRUE</span></span>
+<span><span class="co">#&gt; 22          5.shallow   FALSE</span></span>
+<span><span class="co">#&gt; 25             5.deep   FALSE</span></span>
+<span><span class="co">#&gt; 26  5.moderately deep   FALSE</span></span>
+<span><span class="co">#&gt; 27             5.deep   FALSE</span></span>
+<span><span class="co">#&gt; 28            13.deep    TRUE</span></span>
+<span><span class="co">#&gt; 29            15.deep   FALSE</span></span>
+<span><span class="co">#&gt; 30 13.moderately deep    TRUE</span></span></code></pre></div>
 <p>At this second step, <code>"5.4"</code> (coarse-loamy, deep) is the
 dominant condition, also identified as similar are <code>"5.3"</code>
 (loamy, moderately deep)</p>
@@ -213,42 +252,63 @@ properties have a distance greater than the set threshold
 specify an alternate <code>condition</code> to compare against, or a
 <code>thresh_single</code> value higher or lower than
 <code>2</code>.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/subset-SoilProfileCollection-method.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">x</span>, <span class="op">!</span><span class="va">x</span><span class="op">$</span><span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">res0</span><span class="op">$</span><span class="va">id</span><span class="op">[</span><span class="va">res0</span><span class="op">$</span><span class="va">similar</span><span class="op">]</span>, <span class="va">res1</span><span class="op">$</span><span class="va">id</span><span class="op">[</span><span class="va">res1</span><span class="op">$</span><span class="va">similar</span><span class="op">]</span><span class="op">)</span>,</span>
 <span>            select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"taxpartsize"</span>, <span class="st">"depth"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">res2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/similar_soils.html">similar_soils</a></span><span class="op">(</span><span class="va">z</span>, <span class="va">m</span><span class="op">)</span></span>
-<span><span class="co">#&gt; comparing to dominant reference condition (`7.4` on 5 rows)</span></span>
+<span><span class="co">#&gt; comparing to dominant reference condition (`5.deep` on 4 rows)</span></span>
 <span><span class="va">res2</span></span>
-<span><span class="co">#&gt;    id taxpartsize depth similar_dist similar_single similar</span></span>
-<span><span class="co">#&gt; 1  A1           7     3            1              1    TRUE</span></span>
-<span><span class="co">#&gt; 3  C1           7     3            1              1    TRUE</span></span>
-<span><span class="co">#&gt; 4  D1           7     4            0              0    TRUE</span></span>
-<span><span class="co">#&gt; 6  F1           5     2            4              2   FALSE</span></span>
-<span><span class="co">#&gt; 11 A2           7     4            0              0    TRUE</span></span>
-<span><span class="co">#&gt; 13 C2           7     4            0              0    TRUE</span></span>
-<span><span class="co">#&gt; 14 D2           7     4            0              0    TRUE</span></span>
-<span><span class="co">#&gt; 15 E2           5     2            4              2   FALSE</span></span>
-<span><span class="co">#&gt; 21 A3           7     4            0              0    TRUE</span></span>
-<span><span class="co">#&gt; 22 B3           5     2            4              2   FALSE</span></span>
-<span><span class="co">#&gt; 23 C3           7     3            1              1    TRUE</span></span>
-<span><span class="co">#&gt; 24 D3           7     3            1              1    TRUE</span></span></code></pre></div>
+<span><span class="co">#&gt;    id taxpartsize           depth similar_dist similar_single</span></span>
+<span><span class="co">#&gt; 5  E1           5            deep            0              0</span></span>
+<span><span class="co">#&gt; 6  F1           5         shallow            2              2</span></span>
+<span><span class="co">#&gt; 7  G1           5 moderately deep            1              1</span></span>
+<span><span class="co">#&gt; 15 E2           5         shallow            2              2</span></span>
+<span><span class="co">#&gt; 16 F2           5 moderately deep            1              1</span></span>
+<span><span class="co">#&gt; 17 G2           5            deep            0              0</span></span>
+<span><span class="co">#&gt; 19 I2          15 moderately deep           11             10</span></span>
+<span><span class="co">#&gt; 22 B3           5         shallow            2              2</span></span>
+<span><span class="co">#&gt; 25 E3           5            deep            0              0</span></span>
+<span><span class="co">#&gt; 26 F3           5 moderately deep            1              1</span></span>
+<span><span class="co">#&gt; 27 G3           5            deep            0              0</span></span>
+<span><span class="co">#&gt; 29 I3          15            deep           10             10</span></span>
+<span><span class="co">#&gt;                 group similar</span></span>
+<span><span class="co">#&gt; 5              5.deep    TRUE</span></span>
+<span><span class="co">#&gt; 6           5.shallow   FALSE</span></span>
+<span><span class="co">#&gt; 7   5.moderately deep    TRUE</span></span>
+<span><span class="co">#&gt; 15          5.shallow   FALSE</span></span>
+<span><span class="co">#&gt; 16  5.moderately deep    TRUE</span></span>
+<span><span class="co">#&gt; 17             5.deep    TRUE</span></span>
+<span><span class="co">#&gt; 19 15.moderately deep   FALSE</span></span>
+<span><span class="co">#&gt; 22          5.shallow   FALSE</span></span>
+<span><span class="co">#&gt; 25             5.deep    TRUE</span></span>
+<span><span class="co">#&gt; 26  5.moderately deep    TRUE</span></span>
+<span><span class="co">#&gt; 27             5.deep    TRUE</span></span>
+<span><span class="co">#&gt; 29            15.deep   FALSE</span></span></code></pre></div>
 <p>Applying the similar soils criteria again, we find <code>"7.4"</code>
 is next most dominant, and <code>"7.3"</code> is similar to it.</p>
 <p>We are left with a few soils that are not similar to any of the prior
 3 sets:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/subset-SoilProfileCollection-method.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">res2</span>, <span class="op">!</span><span class="va">similar</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    id taxpartsize depth similar_dist similar_single similar</span></span>
-<span><span class="co">#&gt; 6  F1           5     2            4              2   FALSE</span></span>
-<span><span class="co">#&gt; 15 E2           5     2            4              2   FALSE</span></span>
-<span><span class="co">#&gt; 22 B3           5     2            4              2   FALSE</span></span></code></pre></div>
+<span><span class="co">#&gt;    id taxpartsize           depth similar_dist similar_single</span></span>
+<span><span class="co">#&gt; 6  F1           5         shallow            2              2</span></span>
+<span><span class="co">#&gt; 15 E2           5         shallow            2              2</span></span>
+<span><span class="co">#&gt; 19 I2          15 moderately deep           11             10</span></span>
+<span><span class="co">#&gt; 22 B3           5         shallow            2              2</span></span>
+<span><span class="co">#&gt; 29 I3          15            deep           10             10</span></span>
+<span><span class="co">#&gt;                 group similar</span></span>
+<span><span class="co">#&gt; 6           5.shallow   FALSE</span></span>
+<span><span class="co">#&gt; 15          5.shallow   FALSE</span></span>
+<span><span class="co">#&gt; 19 15.moderately deep   FALSE</span></span>
+<span><span class="co">#&gt; 22          5.shallow   FALSE</span></span>
+<span><span class="co">#&gt; 29            15.deep   FALSE</span></span></code></pre></div>
 <p>We see that all 3 of the remaining soils are <code>"5.2"</code>
 (loamy, shallow).</p>
-<p>Let’s reconstruct a data.frame, with the 4 groups of similar soils
-each identified with a greek letter. We will see which is the most
-prevalent overall based on the whole dataset. We could also assess
-prevalence within individual transects.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<p>Let’s construct a data.frame, with the 4 groups of similar soils each
+identified with a greek letter. We will see which is the most prevalent
+overall based on the whole data set. We could also assess prevalence
+within individual transects.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="st">'rbind'</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>component <span class="op">=</span> <span class="va">greekletters</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/subset-SoilProfileCollection-method.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">res0</span>, <span class="va">similar</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>component <span class="op">=</span> <span class="va">greekletters</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/subset-SoilProfileCollection-method.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">res1</span>, <span class="va">similar</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -267,12 +327,12 @@ prevalence within individual transects.</p>
 <p>We can tabulate the assignments we made and see how that corresponds
 with our concept for the relative abundance of the soils on the
 landscape in the typical delineation.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/proportions.html" class="external-link">prop.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">fin</span><span class="op">$</span><span class="va">component</span><span class="op">)</span><span class="op">)</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">res</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Alpha  Beta Gamma Delta </span></span>
-<span><span class="co">#&gt;   0.3   0.3   0.3   0.1</span></span></code></pre></div>
+<span><span class="co">#&gt;     Alpha      Beta     Gamma     Delta </span></span>
+<span><span class="co">#&gt; 0.3666667 0.2333333 0.2333333 0.1666667</span></span></code></pre></div>
 <p>In this case, we see Alpha, Beta and Gamma as major components, and
 Delta as a lesser component. However, Delta is dissimilar (and shallow,
 which is likely strongly contrasting) compared to all of the prior
@@ -283,14 +343,14 @@ more-rarely-observed, unique, contrasting soils that were not captured
 as distinct by the rating functions. These could be split off either by
 creating a rating to capture them, or just noting their presence as
 minor components.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># TODO: abstract this concept</span></span>
 <span><span class="va">cmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/subset-SoilProfileCollection-method.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">fin</span>, <span class="va">component</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">res</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">ref</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/interaction.html" class="external-link">interaction</a></span><span class="op">(</span><span class="va">cmp</span><span class="op">$</span><span class="va">taxpartsize</span>, <span class="va">cmp</span><span class="op">$</span><span class="va">depth</span><span class="op">)</span></span>
 <span><span class="op">)</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">fin_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/similar_soils.html">similar_soils</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">m</span>, <span class="va">ref</span><span class="op">)</span></span>
-<span><span class="co">#&gt; comparing to dominant reference condition (`13.3` on 6 rows)</span></span>
+<span><span class="co">#&gt; comparing to dominant reference condition (`7.deep` on 7 rows)</span></span>
 <span></span>
 <span><span class="co"># transfer similarity distance and similar ranking</span></span>
 <span><span class="va">fin</span><span class="op">$</span><span class="va">similar_dist</span> <span class="op">&lt;-</span> <span class="va">fin_sim</span><span class="op">$</span><span class="va">similar_dist</span></span>
@@ -298,307 +358,299 @@ minor components.</p>
 <span></span>
 <span><span class="co"># original sort order</span></span>
 <span><span class="va">fin</span></span>
-<span><span class="co">#&gt;    component id taxpartsize depth similar_dist similar_single similar</span></span>
-<span><span class="co">#&gt; 1      Gamma A1           7     3            6              1   FALSE</span></span>
-<span><span class="co">#&gt; 2       Beta B1           5     4            9              0   FALSE</span></span>
-<span><span class="co">#&gt; 3      Gamma C1           7     3            6              1   FALSE</span></span>
-<span><span class="co">#&gt; 4      Gamma D1           7     4            7              0   FALSE</span></span>
-<span><span class="co">#&gt; 5       Beta E1           5     4            9              0   FALSE</span></span>
-<span><span class="co">#&gt; 6      Delta F1           5     2            9              2   FALSE</span></span>
-<span><span class="co">#&gt; 7       Beta G1           5     3            8              1   FALSE</span></span>
-<span><span class="co">#&gt; 8      Alpha H1          13     4            1              1    TRUE</span></span>
-<span><span class="co">#&gt; 9      Alpha I1          13     3            0              0    TRUE</span></span>
-<span><span class="co">#&gt; 10     Alpha J1          13     3            0              0    TRUE</span></span>
-<span><span class="co">#&gt; 11     Gamma A2           7     4            7              0   FALSE</span></span>
-<span><span class="co">#&gt; 12      Beta B2           5     4            9              0   FALSE</span></span>
-<span><span class="co">#&gt; 13     Gamma C2           7     4            7              0   FALSE</span></span>
-<span><span class="co">#&gt; 14     Gamma D2           7     4            7              0   FALSE</span></span>
-<span><span class="co">#&gt; 15     Delta E2           5     2            9              2   FALSE</span></span>
-<span><span class="co">#&gt; 16      Beta F2           5     3            8              1   FALSE</span></span>
-<span><span class="co">#&gt; 17      Beta G2           5     4            9              0   FALSE</span></span>
-<span><span class="co">#&gt; 18     Alpha H2          13     3            0              0    TRUE</span></span>
-<span><span class="co">#&gt; 19     Alpha I2          13     3            0              0    TRUE</span></span>
-<span><span class="co">#&gt; 20     Alpha J2          13     3            0              0    TRUE</span></span>
-<span><span class="co">#&gt; 21     Gamma A3           7     4            7              0   FALSE</span></span>
-<span><span class="co">#&gt; 22     Delta B3           5     2            9              2   FALSE</span></span>
-<span><span class="co">#&gt; 23     Gamma C3           7     3            6              1   FALSE</span></span>
-<span><span class="co">#&gt; 24     Gamma D3           7     3            6              1   FALSE</span></span>
-<span><span class="co">#&gt; 25      Beta E3           5     4            9              0   FALSE</span></span>
-<span><span class="co">#&gt; 26      Beta F3           5     3            8              1   FALSE</span></span>
-<span><span class="co">#&gt; 27      Beta G3           5     4            9              0   FALSE</span></span>
-<span><span class="co">#&gt; 28     Alpha H3          13     4            1              1    TRUE</span></span>
-<span><span class="co">#&gt; 29     Alpha I3          13     4            1              1    TRUE</span></span>
-<span><span class="co">#&gt; 30     Alpha J3          13     3            0              0    TRUE</span></span></code></pre></div>
-<table class="table">
+<span><span class="co">#&gt;    component id taxpartsize           depth similar_dist similar_single</span></span>
+<span><span class="co">#&gt; 1      Alpha A1           7 moderately deep            1              1</span></span>
+<span><span class="co">#&gt; 2      Alpha B1           7            deep            0              0</span></span>
+<span><span class="co">#&gt; 3      Alpha C1           7 moderately deep            1              1</span></span>
+<span><span class="co">#&gt; 4      Alpha D1           7            deep            0              0</span></span>
+<span><span class="co">#&gt; 5      Gamma E1           5            deep            2              0</span></span>
+<span><span class="co">#&gt; 6      Delta F1           5         shallow            4              2</span></span>
+<span><span class="co">#&gt; 7      Gamma G1           5 moderately deep            3              1</span></span>
+<span><span class="co">#&gt; 8       Beta H1          13            deep            6              1</span></span>
+<span><span class="co">#&gt; 9       Beta I1          13 moderately deep            7              0</span></span>
+<span><span class="co">#&gt; 10      Beta J1          13 moderately deep            7              0</span></span>
+<span><span class="co">#&gt; 11     Alpha A2           7            deep            0              0</span></span>
+<span><span class="co">#&gt; 12     Alpha B2           7            deep            0              0</span></span>
+<span><span class="co">#&gt; 13     Alpha C2           7            deep            0              0</span></span>
+<span><span class="co">#&gt; 14     Alpha D2           7            deep            0              0</span></span>
+<span><span class="co">#&gt; 15     Delta E2           5         shallow            4              2</span></span>
+<span><span class="co">#&gt; 16     Gamma F2           5 moderately deep            3              1</span></span>
+<span><span class="co">#&gt; 17     Gamma G2           5            deep            2              0</span></span>
+<span><span class="co">#&gt; 18      Beta H2          13 moderately deep            7              0</span></span>
+<span><span class="co">#&gt; 19     Delta I2          15 moderately deep            9             10</span></span>
+<span><span class="co">#&gt; 20      Beta J2          13 moderately deep            7              0</span></span>
+<span><span class="co">#&gt; 21     Alpha A3           7            deep            0              0</span></span>
+<span><span class="co">#&gt; 22     Delta B3           5         shallow            4              2</span></span>
+<span><span class="co">#&gt; 23     Alpha C3           7 moderately deep            1              1</span></span>
+<span><span class="co">#&gt; 24     Alpha D3           7 moderately deep            1              1</span></span>
+<span><span class="co">#&gt; 25     Gamma E3           5            deep            2              0</span></span>
+<span><span class="co">#&gt; 26     Gamma F3           5 moderately deep            3              1</span></span>
+<span><span class="co">#&gt; 27     Gamma G3           5            deep            2              0</span></span>
+<span><span class="co">#&gt; 28      Beta H3          13            deep            6              1</span></span>
+<span><span class="co">#&gt; 29     Delta I3          15            deep            8             10</span></span>
+<span><span class="co">#&gt; 30      Beta J3          13 moderately deep            7              0</span></span>
+<span><span class="co">#&gt;                 group similar</span></span>
+<span><span class="co">#&gt; 1   7.moderately deep    TRUE</span></span>
+<span><span class="co">#&gt; 2              7.deep    TRUE</span></span>
+<span><span class="co">#&gt; 3   7.moderately deep    TRUE</span></span>
+<span><span class="co">#&gt; 4              7.deep    TRUE</span></span>
+<span><span class="co">#&gt; 5              5.deep   FALSE</span></span>
+<span><span class="co">#&gt; 6           5.shallow   FALSE</span></span>
+<span><span class="co">#&gt; 7   5.moderately deep   FALSE</span></span>
+<span><span class="co">#&gt; 8             13.deep   FALSE</span></span>
+<span><span class="co">#&gt; 9  13.moderately deep   FALSE</span></span>
+<span><span class="co">#&gt; 10 13.moderately deep   FALSE</span></span>
+<span><span class="co">#&gt; 11             7.deep    TRUE</span></span>
+<span><span class="co">#&gt; 12             7.deep    TRUE</span></span>
+<span><span class="co">#&gt; 13             7.deep    TRUE</span></span>
+<span><span class="co">#&gt; 14             7.deep    TRUE</span></span>
+<span><span class="co">#&gt; 15          5.shallow   FALSE</span></span>
+<span><span class="co">#&gt; 16  5.moderately deep   FALSE</span></span>
+<span><span class="co">#&gt; 17             5.deep   FALSE</span></span>
+<span><span class="co">#&gt; 18 13.moderately deep   FALSE</span></span>
+<span><span class="co">#&gt; 19 15.moderately deep   FALSE</span></span>
+<span><span class="co">#&gt; 20 13.moderately deep   FALSE</span></span>
+<span><span class="co">#&gt; 21             7.deep    TRUE</span></span>
+<span><span class="co">#&gt; 22          5.shallow   FALSE</span></span>
+<span><span class="co">#&gt; 23  7.moderately deep    TRUE</span></span>
+<span><span class="co">#&gt; 24  7.moderately deep    TRUE</span></span>
+<span><span class="co">#&gt; 25             5.deep   FALSE</span></span>
+<span><span class="co">#&gt; 26  5.moderately deep   FALSE</span></span>
+<span><span class="co">#&gt; 27             5.deep   FALSE</span></span>
+<span><span class="co">#&gt; 28            13.deep   FALSE</span></span>
+<span><span class="co">#&gt; 29            15.deep   FALSE</span></span>
+<span><span class="co">#&gt; 30 13.moderately deep   FALSE</span></span></code></pre></div>
+<table style="width:100%;" class="table">
 <colgroup>
-<col width="4%">
-<col width="14%">
-<col width="4%">
-<col width="17%">
+<col width="3%">
+<col width="10%">
+<col width="3%">
+<col width="12%">
+<col width="16%">
+<col width="13%">
+<col width="15%">
+<col width="19%">
 <col width="8%">
-<col width="18%">
-<col width="21%">
-<col width="11%">
 </colgroup>
 <thead><tr class="header">
 <th align="left"></th>
 <th align="left">component</th>
 <th align="left">id</th>
 <th align="right">taxpartsize</th>
-<th align="right">depth</th>
+<th align="left">depth</th>
 <th align="right">similar_dist</th>
 <th align="right">similar_single</th>
+<th align="left">group</th>
 <th align="left">similar</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">9</td>
+<td align="left">2</td>
 <td align="left">Alpha</td>
-<td align="left">I1</td>
-<td align="right">13</td>
-<td align="right">3</td>
+<td align="left">B1</td>
+<td align="right">7</td>
+<td align="left">deep</td>
 <td align="right">0</td>
 <td align="right">0</td>
+<td align="left">7.deep</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
-<td align="left">10</td>
+<td align="left">4</td>
 <td align="left">Alpha</td>
-<td align="left">J1</td>
-<td align="right">13</td>
-<td align="right">3</td>
+<td align="left">D1</td>
+<td align="right">7</td>
+<td align="left">deep</td>
 <td align="right">0</td>
 <td align="right">0</td>
+<td align="left">7.deep</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
-<td align="left">18</td>
+<td align="left">11</td>
 <td align="left">Alpha</td>
-<td align="left">H2</td>
-<td align="right">13</td>
-<td align="right">3</td>
+<td align="left">A2</td>
+<td align="right">7</td>
+<td align="left">deep</td>
 <td align="right">0</td>
 <td align="right">0</td>
+<td align="left">7.deep</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
-<td align="left">19</td>
+<td align="left">12</td>
 <td align="left">Alpha</td>
-<td align="left">I2</td>
-<td align="right">13</td>
-<td align="right">3</td>
+<td align="left">B2</td>
+<td align="right">7</td>
+<td align="left">deep</td>
 <td align="right">0</td>
 <td align="right">0</td>
+<td align="left">7.deep</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
-<td align="left">20</td>
+<td align="left">13</td>
 <td align="left">Alpha</td>
-<td align="left">J2</td>
-<td align="right">13</td>
-<td align="right">3</td>
+<td align="left">C2</td>
+<td align="right">7</td>
+<td align="left">deep</td>
 <td align="right">0</td>
 <td align="right">0</td>
+<td align="left">7.deep</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
-<td align="left">30</td>
+<td align="left">14</td>
 <td align="left">Alpha</td>
-<td align="left">J3</td>
-<td align="right">13</td>
-<td align="right">3</td>
+<td align="left">D2</td>
+<td align="right">7</td>
+<td align="left">deep</td>
 <td align="right">0</td>
 <td align="right">0</td>
+<td align="left">7.deep</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
-<td align="left">8</td>
+<td align="left">21</td>
 <td align="left">Alpha</td>
-<td align="left">H1</td>
-<td align="right">13</td>
-<td align="right">4</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="left">TRUE</td>
-</tr>
-<tr class="even">
-<td align="left">28</td>
-<td align="left">Alpha</td>
-<td align="left">H3</td>
-<td align="right">13</td>
-<td align="right">4</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="left">TRUE</td>
-</tr>
-<tr class="odd">
-<td align="left">29</td>
-<td align="left">Alpha</td>
-<td align="left">I3</td>
-<td align="right">13</td>
-<td align="right">4</td>
-<td align="right">1</td>
-<td align="right">1</td>
+<td align="left">A3</td>
+<td align="right">7</td>
+<td align="left">deep</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">7.deep</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">1</td>
-<td align="left">Gamma</td>
+<td align="left">Alpha</td>
 <td align="left">A1</td>
 <td align="right">7</td>
-<td align="right">3</td>
-<td align="right">6</td>
+<td align="left">moderately deep</td>
 <td align="right">1</td>
-<td align="left">FALSE</td>
+<td align="right">1</td>
+<td align="left">7.moderately deep</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">3</td>
-<td align="left">Gamma</td>
+<td align="left">Alpha</td>
 <td align="left">C1</td>
 <td align="right">7</td>
-<td align="right">3</td>
-<td align="right">6</td>
+<td align="left">moderately deep</td>
 <td align="right">1</td>
-<td align="left">FALSE</td>
+<td align="right">1</td>
+<td align="left">7.moderately deep</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">23</td>
-<td align="left">Gamma</td>
+<td align="left">Alpha</td>
 <td align="left">C3</td>
 <td align="right">7</td>
-<td align="right">3</td>
-<td align="right">6</td>
+<td align="left">moderately deep</td>
 <td align="right">1</td>
-<td align="left">FALSE</td>
+<td align="right">1</td>
+<td align="left">7.moderately deep</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">24</td>
-<td align="left">Gamma</td>
+<td align="left">Alpha</td>
 <td align="left">D3</td>
 <td align="right">7</td>
-<td align="right">3</td>
-<td align="right">6</td>
+<td align="left">moderately deep</td>
 <td align="right">1</td>
-<td align="left">FALSE</td>
-</tr>
-<tr class="even">
-<td align="left">4</td>
-<td align="left">Gamma</td>
-<td align="left">D1</td>
-<td align="right">7</td>
-<td align="right">4</td>
-<td align="right">7</td>
-<td align="right">0</td>
-<td align="left">FALSE</td>
-</tr>
-<tr class="odd">
-<td align="left">11</td>
-<td align="left">Gamma</td>
-<td align="left">A2</td>
-<td align="right">7</td>
-<td align="right">4</td>
-<td align="right">7</td>
-<td align="right">0</td>
-<td align="left">FALSE</td>
-</tr>
-<tr class="even">
-<td align="left">13</td>
-<td align="left">Gamma</td>
-<td align="left">C2</td>
-<td align="right">7</td>
-<td align="right">4</td>
-<td align="right">7</td>
-<td align="right">0</td>
-<td align="left">FALSE</td>
-</tr>
-<tr class="odd">
-<td align="left">14</td>
-<td align="left">Gamma</td>
-<td align="left">D2</td>
-<td align="right">7</td>
-<td align="right">4</td>
-<td align="right">7</td>
-<td align="right">0</td>
-<td align="left">FALSE</td>
-</tr>
-<tr class="even">
-<td align="left">21</td>
-<td align="left">Gamma</td>
-<td align="left">A3</td>
-<td align="right">7</td>
-<td align="right">4</td>
-<td align="right">7</td>
-<td align="right">0</td>
-<td align="left">FALSE</td>
-</tr>
-<tr class="odd">
-<td align="left">7</td>
-<td align="left">Beta</td>
-<td align="left">G1</td>
-<td align="right">5</td>
-<td align="right">3</td>
-<td align="right">8</td>
 <td align="right">1</td>
-<td align="left">FALSE</td>
+<td align="left">7.moderately deep</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="even">
-<td align="left">16</td>
-<td align="left">Beta</td>
-<td align="left">F2</td>
-<td align="right">5</td>
-<td align="right">3</td>
-<td align="right">8</td>
-<td align="right">1</td>
-<td align="left">FALSE</td>
-</tr>
-<tr class="odd">
-<td align="left">26</td>
-<td align="left">Beta</td>
-<td align="left">F3</td>
-<td align="right">5</td>
-<td align="right">3</td>
-<td align="right">8</td>
-<td align="right">1</td>
-<td align="left">FALSE</td>
-</tr>
-<tr class="even">
-<td align="left">2</td>
-<td align="left">Beta</td>
-<td align="left">B1</td>
-<td align="right">5</td>
-<td align="right">4</td>
-<td align="right">9</td>
-<td align="right">0</td>
-<td align="left">FALSE</td>
-</tr>
-<tr class="odd">
 <td align="left">5</td>
-<td align="left">Beta</td>
+<td align="left">Gamma</td>
 <td align="left">E1</td>
 <td align="right">5</td>
-<td align="right">4</td>
-<td align="right">9</td>
+<td align="left">deep</td>
+<td align="right">2</td>
 <td align="right">0</td>
+<td align="left">5.deep</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">17</td>
+<td align="left">Gamma</td>
+<td align="left">G2</td>
+<td align="right">5</td>
+<td align="left">deep</td>
+<td align="right">2</td>
+<td align="right">0</td>
+<td align="left">5.deep</td>
 <td align="left">FALSE</td>
 </tr>
 <tr class="even">
+<td align="left">25</td>
+<td align="left">Gamma</td>
+<td align="left">E3</td>
+<td align="right">5</td>
+<td align="left">deep</td>
+<td align="right">2</td>
+<td align="right">0</td>
+<td align="left">5.deep</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">27</td>
+<td align="left">Gamma</td>
+<td align="left">G3</td>
+<td align="right">5</td>
+<td align="left">deep</td>
+<td align="right">2</td>
+<td align="right">0</td>
+<td align="left">5.deep</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">7</td>
+<td align="left">Gamma</td>
+<td align="left">G1</td>
+<td align="right">5</td>
+<td align="left">moderately deep</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="left">5.moderately deep</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">16</td>
+<td align="left">Gamma</td>
+<td align="left">F2</td>
+<td align="right">5</td>
+<td align="left">moderately deep</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="left">5.moderately deep</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">26</td>
+<td align="left">Gamma</td>
+<td align="left">F3</td>
+<td align="right">5</td>
+<td align="left">moderately deep</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="left">5.moderately deep</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
 <td align="left">6</td>
 <td align="left">Delta</td>
 <td align="left">F1</td>
 <td align="right">5</td>
-<td align="right">2</td>
-<td align="right">9</td>
-<td align="right">2</td>
-<td align="left">FALSE</td>
-</tr>
-<tr class="odd">
-<td align="left">12</td>
-<td align="left">Beta</td>
-<td align="left">B2</td>
-<td align="right">5</td>
+<td align="left">shallow</td>
 <td align="right">4</td>
-<td align="right">9</td>
-<td align="right">0</td>
+<td align="right">2</td>
+<td align="left">5.shallow</td>
 <td align="left">FALSE</td>
 </tr>
 <tr class="even">
@@ -606,53 +658,127 @@ minor components.</p>
 <td align="left">Delta</td>
 <td align="left">E2</td>
 <td align="right">5</td>
+<td align="left">shallow</td>
+<td align="right">4</td>
 <td align="right">2</td>
-<td align="right">9</td>
-<td align="right">2</td>
+<td align="left">5.shallow</td>
 <td align="left">FALSE</td>
 </tr>
 <tr class="odd">
-<td align="left">17</td>
-<td align="left">Beta</td>
-<td align="left">G2</td>
-<td align="right">5</td>
-<td align="right">4</td>
-<td align="right">9</td>
-<td align="right">0</td>
-<td align="left">FALSE</td>
-</tr>
-<tr class="even">
 <td align="left">22</td>
 <td align="left">Delta</td>
 <td align="left">B3</td>
 <td align="right">5</td>
-<td align="right">2</td>
-<td align="right">9</td>
-<td align="right">2</td>
-<td align="left">FALSE</td>
-</tr>
-<tr class="odd">
-<td align="left">25</td>
-<td align="left">Beta</td>
-<td align="left">E3</td>
-<td align="right">5</td>
+<td align="left">shallow</td>
 <td align="right">4</td>
-<td align="right">9</td>
-<td align="right">0</td>
+<td align="right">2</td>
+<td align="left">5.shallow</td>
 <td align="left">FALSE</td>
 </tr>
 <tr class="even">
-<td align="left">27</td>
+<td align="left">8</td>
 <td align="left">Beta</td>
-<td align="left">G3</td>
-<td align="right">5</td>
-<td align="right">4</td>
-<td align="right">9</td>
+<td align="left">H1</td>
+<td align="right">13</td>
+<td align="left">deep</td>
+<td align="right">6</td>
+<td align="right">1</td>
+<td align="left">13.deep</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">28</td>
+<td align="left">Beta</td>
+<td align="left">H3</td>
+<td align="right">13</td>
+<td align="left">deep</td>
+<td align="right">6</td>
+<td align="right">1</td>
+<td align="left">13.deep</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">9</td>
+<td align="left">Beta</td>
+<td align="left">I1</td>
+<td align="right">13</td>
+<td align="left">moderately deep</td>
+<td align="right">7</td>
 <td align="right">0</td>
+<td align="left">13.moderately deep</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">10</td>
+<td align="left">Beta</td>
+<td align="left">J1</td>
+<td align="right">13</td>
+<td align="left">moderately deep</td>
+<td align="right">7</td>
+<td align="right">0</td>
+<td align="left">13.moderately deep</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">18</td>
+<td align="left">Beta</td>
+<td align="left">H2</td>
+<td align="right">13</td>
+<td align="left">moderately deep</td>
+<td align="right">7</td>
+<td align="right">0</td>
+<td align="left">13.moderately deep</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">20</td>
+<td align="left">Beta</td>
+<td align="left">J2</td>
+<td align="right">13</td>
+<td align="left">moderately deep</td>
+<td align="right">7</td>
+<td align="right">0</td>
+<td align="left">13.moderately deep</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">30</td>
+<td align="left">Beta</td>
+<td align="left">J3</td>
+<td align="right">13</td>
+<td align="left">moderately deep</td>
+<td align="right">7</td>
+<td align="right">0</td>
+<td align="left">13.moderately deep</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">29</td>
+<td align="left">Delta</td>
+<td align="left">I3</td>
+<td align="right">15</td>
+<td align="left">deep</td>
+<td align="right">8</td>
+<td align="right">10</td>
+<td align="left">15.deep</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">19</td>
+<td align="left">Delta</td>
+<td align="left">I2</td>
+<td align="right">15</td>
+<td align="left">moderately deep</td>
+<td align="right">9</td>
+<td align="right">10</td>
+<td align="left">15.moderately deep</td>
 <td align="left">FALSE</td>
 </tr>
 </tbody>
-</table></main>
+</table>
+<p>This process of iteratively and grouping soils into similarity groups
+can be automated using the <code><a href="../reference/design_mapunit.html">design_mapunit()</a></code> function.</p>
+  </main>
 </div>
 
 
