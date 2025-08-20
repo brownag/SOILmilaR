@@ -1,57 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>http://humus.rocks/SOILmilaR/404.html</loc>
-  </url>
-  <url>
-    <loc>http://humus.rocks/SOILmilaR/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>http://humus.rocks/SOILmilaR/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>http://humus.rocks/SOILmilaR/articles/similar-soils-loafercreek.html</loc>
-  </url>
-  <url>
-    <loc>http://humus.rocks/SOILmilaR/articles/synthetic-transects.html</loc>
-  </url>
-  <url>
-    <loc>http://humus.rocks/SOILmilaR/authors.html</loc>
-  </url>
-  <url>
-    <loc>http://humus.rocks/SOILmilaR/index.html</loc>
-  </url>
-  <url>
-    <loc>http://humus.rocks/SOILmilaR/reference/BinomCIMeanBootCustom.html</loc>
-  </url>
-  <url>
-    <loc>http://humus.rocks/SOILmilaR/reference/BinomCIMeanNorm.html</loc>
-  </url>
-  <url>
-    <loc>http://humus.rocks/SOILmilaR/reference/BinomCIMeanPoolCustom.html</loc>
-  </url>
-  <url>
-    <loc>http://humus.rocks/SOILmilaR/reference/BinomCIMeanPoolNorm.html</loc>
-  </url>
-  <url>
-    <loc>http://humus.rocks/SOILmilaR/reference/BinomVarCustom.html</loc>
-  </url>
-  <url>
-    <loc>http://humus.rocks/SOILmilaR/reference/BinomVarNorm.html</loc>
-  </url>
-  <url>
-    <loc>http://humus.rocks/SOILmilaR/reference/SOILmilaR-package.html</loc>
-  </url>
-  <url>
-    <loc>http://humus.rocks/SOILmilaR/reference/greekletters.html</loc>
-  </url>
-  <url>
-    <loc>http://humus.rocks/SOILmilaR/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>http://humus.rocks/SOILmilaR/reference/pscs_weighted.html</loc>
-  </url>
-  <url>
-    <loc>http://humus.rocks/SOILmilaR/reference/similar_soils.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>http://humus.rocks/SOILmilaR/404.html</loc></url>
+<url><loc>http://humus.rocks/SOILmilaR/LICENSE.html</loc></url>
+<url><loc>http://humus.rocks/SOILmilaR/articles/index.html</loc></url>
+<url><loc>http://humus.rocks/SOILmilaR/articles/similar-soils-loafercreek.html</loc></url>
+<url><loc>http://humus.rocks/SOILmilaR/articles/synthetic-transects.html</loc></url>
+<url><loc>http://humus.rocks/SOILmilaR/authors.html</loc></url>
+<url><loc>http://humus.rocks/SOILmilaR/index.html</loc></url>
+<url><loc>http://humus.rocks/SOILmilaR/news/index.html</loc></url>
+<url><loc>http://humus.rocks/SOILmilaR/reference/BinomCIMeanBootCustom.html</loc></url>
+<url><loc>http://humus.rocks/SOILmilaR/reference/BinomCIMeanNorm.html</loc></url>
+<url><loc>http://humus.rocks/SOILmilaR/reference/BinomCIMeanPoolCustom.html</loc></url>
+<url><loc>http://humus.rocks/SOILmilaR/reference/BinomCIMeanPoolNorm.html</loc></url>
+<url><loc>http://humus.rocks/SOILmilaR/reference/BinomVarCustom.html</loc></url>
+<url><loc>http://humus.rocks/SOILmilaR/reference/BinomVarNorm.html</loc></url>
+<url><loc>http://humus.rocks/SOILmilaR/reference/SOILmilaR-package.html</loc></url>
+<url><loc>http://humus.rocks/SOILmilaR/reference/greekletters.html</loc></url>
+<url><loc>http://humus.rocks/SOILmilaR/reference/index.html</loc></url>
+<url><loc>http://humus.rocks/SOILmilaR/reference/pscs_weighted.html</loc></url>
+<url><loc>http://humus.rocks/SOILmilaR/reference/similar_soils.html</loc></url>
 </urlset>
+

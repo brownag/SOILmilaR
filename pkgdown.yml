@@ -1,11 +1,10 @@
 pandoc: 3.1.11
-pkgdown: 2.0.7
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   similar-soils-loafercreek: similar-soils-loafercreek.html
   synthetic-transects: synthetic-transects.html
-last_built: 2024-03-13T23:47Z
+last_built: 2025-08-20T00:48Z
 urls:
   reference: http://humus.rocks/SOILmilaR/reference
   article: http://humus.rocks/SOILmilaR/articles
-
