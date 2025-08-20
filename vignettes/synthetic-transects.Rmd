@@ -46,12 +46,12 @@ Next we define some rating functions for particle size class and depth class.
 rate_taxpartsize <- function(x) {
   dplyr::case_match(x,
                     c("sandy-skeletal") ~ 1,
-                    c("sandy") ~ 2,
-                    c("loamy", "coarse-loamy", "coarse-silty") ~ 3,
-                    c("fine-loamy", "fine-silty") ~ 4,
-                    c("clayey", "fine") ~ 5,
-                    c("very-fine") ~ 6,
-                    c("loamy-skeletal", "clayey-skeletal") ~ 7)
+                    c("sandy") ~ 3,
+                    c("loamy", "coarse-loamy", "coarse-silty") ~ 5,
+                    c("fine-loamy", "fine-silty") ~ 7,
+                    c("clayey", "fine") ~ 9,
+                    c("very-fine") ~ 11,
+                    c("loamy-skeletal", "clayey-skeletal") ~ 13)
 }
 
 rate_depthclass <- function(x,
@@ -80,11 +80,11 @@ res0 <- similar_soils(x, m)
 res0
 ```
 
-First, we accept what is identified as the "dominant condition" for the dataset, including the similar soils, will be a major component of the hypothetical mapunit. Identifying soils similar to `"7.3"` (moderately deep, skeletal), corresponds to the soils supporting a hypothetical major component in a mapunit. 
+Identifying soils similar to `"13.3"` (moderately deep, skeletal), corresponds to a major, dominant, component in a map unit. 
 
-We might consider selecting a different reference condition manually after inspection. If we were to do that we could set, for example, `condition="4.4"` to select condition `"4.4"` rather than `"7.3"` that was automatically selected in this example.
+We might consider selecting a different reference condition manually after inspection. If we were to do that we could set, for example, `condition="7.4"` to compare against condition `"7.4"` rather than `"13.3"` that was automatically selected in this example.
 
-Next, let's take the remaining dissimilar soils, and re-apply the similarity criteria based on the next-most-dominant condition. We could consider loosening the concept of "similarity" by setting `thresh=2`.
+Next, let's take the remaining dissimilar soils, and re-apply the similarity criteria based on the next-most-dominant condition. 
 
 ```{r}
 y <- subset(x, !res0$similar, select = c("id", "taxpartsize", "depth"))
@@ -93,9 +93,11 @@ res1 <- similar_soils(y, m)
 res1
 ```
 
-At this second step, `"3.4"` (loamy, moderately deep) is the dominant condition, also identified as similar are `"3.4"` (coarse-loamy, deep). One might consider which one of these is the best representative condition for the mapunit (including unobserved areas) regardless of what is "dominant" per se. 
+At this second step, `"5.4"` (coarse-loamy, deep) is the dominant condition, also identified as similar are `"5.3"` (loamy, moderately deep)
 
-If there are issues with dissimilar soils being included in the same groups, consider revising the rating functions to ensure dissimilar properties have a distance greater than the set threshold (`thresh`). With `similar_soils()`, you can specify an alternate `condition` to compare against, or a  `thresh` value higher or lower than `1`. 
+One might consider which one of these is the best representative condition for the map unit (including unobserved areas) regardless of what is "dominant" in the observation data.
+
+If there are issues with dissimilar soils being included in the same groups, consider revising the rating functions to ensure dissimilar properties have a distance greater than the set threshold (`thresh_single`). With `similar_soils()`, you can specify an alternate `condition` to compare against, or a `thresh_single` value higher or lower than `2`. 
 
 ```{r}
 z <- subset(x, !x$id %in% c(res0$id[res0$similar], res1$id[res1$similar]),
@@ -103,9 +105,16 @@ z <- subset(x, !x$id %in% c(res0$id[res0$similar], res1$id[res1$similar]),
 res2 <- similar_soils(z, m)
 res2
 ```
+ 
+Applying the similar soils criteria again, we find `"7.4"` is next most dominant, and `"7.3"` is similar to it.
 
-Applying the similar soils criteria a final time, we are left with two components, `"4.3"` and `"3.2"`; the latter is dissimilar (and limiting).
+We are left with a few soils that are not similar to any of the prior 3 sets:
 
+```{r}
+subset(res2, !similar)
+```
+
+We see that all 3 of the remaining soils are `"5.2"` (loamy, shallow).
 
 Let's reconstruct a data.frame, with the 4 groups of similar soils each identified with a greek letter. We will see which is the most prevalent overall based on the whole dataset. We could also assess prevalence within individual transects.
 
@@ -134,6 +143,9 @@ res <- sort(prop.table(table(fin$component)), decreasing = TRUE)
 res
 ```
 
+In this case, we see Alpha, Beta and Gamma as major components, and Delta as a lesser component. However, Delta is dissimilar (and shallow, which is likely strongly contrasting) compared to all of the prior soils, so  if we accept the observation proportions as map unit component percentages we would have a four major component map unit.
+
+It may be that there are other miscellaneous areas, or more-rarely-observed, unique, contrasting soils that were not captured as distinct by the rating functions. These could be split off either by creating a rating to capture them, or just noting their presence as minor components.
 
 ```{r}
 # TODO: abstract this concept
@@ -155,5 +167,3 @@ fin
 # sort based on distance from dominant condition
 knitr::kable(fin[order(fin$similar_dist),])
 ```
-
-

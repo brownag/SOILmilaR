@@ -22,7 +22,7 @@ The `loafercreek` dataset includes soils that are generally similar to Loafercre
 
 `loafercreek` is a _SoilProfileCollection_ object. This is a special data structure defined by the {aqp} (Algorithms for Quantitative Pedology) package intended for managing soil horizon data, representing various depths within a soil "profile", along with "site-level" data that corresponds to the point location or profile in aggregate. 
 
-A variety of {aqp} functions are used to calculate site-level characteristics that are used in hierarchical clustering methods from {stats} and {cluster} as well as similar soils calculations available via the {SOILmilaR} package. Methods for visualizing clusters are provided by the {sharpshootR} package.
+A variety of {aqp} functions are used to calculate site-level characteristics that are used in hierarchical clustering methods from {stats} and {cluster} as well as similar soils calculations available via the {SOILmilaR} package. Methods for visualizing clusters are provided by the {aqp} package.
 
 ---
 
@@ -48,16 +48,15 @@ To use your own NASIS data you can replace the `spc` object (a random subset of 
 Next, we define some rating functions that can be used for generating variables that can be used in comparing soils and assessing overall similarity.
 
 ```{r}
-rate_taxpartsize <- function(x, ...) {
+rate_taxpartsize <- function(x) {
   dplyr::case_match(x,
                     c("sandy-skeletal") ~ 1,
-                    c("sandy") ~ 2,
-                    c("loamy", "coarse-loamy", "coarse-silty") ~ 3,
-                    c("fine-loamy", "fine-silty") ~ 4,
-                    c("clayey", "fine") ~ 5,
-                    c("very-fine") ~ 6,
-                    c("loamy-skeletal", "clayey-skeletal") ~ 7)
-  
+                    c("sandy") ~ 3,
+                    c("loamy", "coarse-loamy", "coarse-silty") ~ 5,
+                    c("fine-loamy", "fine-silty") ~ 7,
+                    c("clayey", "fine") ~ 9,
+                    c("very-fine") ~ 11,
+                    c("loamy-skeletal", "clayey-skeletal") ~ 13)
 }
 
 rate_depthclass <- function(x,
@@ -77,7 +76,7 @@ rate_depthclass <- function(x,
 Here we use several {aqp} functions to estimate the particle size control section boundaries, the depth to a root-restrictive layer, and apply our rating functions to the depth and particle size class as populated in NASIS.
 
 ```{r}
-site(spc) <- estimatePSCS(spc)
+site(spc) <- estimatePSCS(spc, clay.attr = "claytotest")
 
 # calculate soil depth
 spc$dp <- minDepthOf(spc, pattern = "R|Cr|Cd|kk|m")[[aqp::horizonDepths(spc)[1]]]
@@ -130,21 +129,21 @@ plot(as.dendrogram(m1))
 
 In the next most complex model we replace the taxonomic particle size class rating with the PSCS weighted average percent clay and the percent fragments.
 
-We find the same outgroup of three pedons we separated earlier, the magnitude of taxonomic distances (y axis) further increases, and we get a lot more subtle variation within that reflects more continuous variation in PSCS clay and fragments.
+We find the same "outgroup" of three pedons we separated earlier, the magnitude of taxonomic distances (y axis) further increases, and we get a lot more subtle variation within that reflects more continuous variation in PSCS clay and fragments.
 
 ```{r}
 m2 <- cluster::agnes(x2[complete.cases(x2),], method = "gaverage")
 plot(as.dendrogram(m2))
 ```
 
-Since most of the soils in the `loafercreek` dataset are moderately deep we do not get much information from the depth class grouping. So, instead, in the next model we replace the depth class with the actual depth to root-limiting layer. We find again that the loamy-skeletal soils are separated, and some distances of groups within the fine-loamy soils shift, but ultimately there is little effect as the variation is still constrained within moderately deep depth class.
+Since most of the soils in the `loafercreek` dat set are moderately deep we do not get much information from the depth class grouping. So, instead, in the next model we replace the depth class with the actual depth to root-limiting layer. We find again that the loamy-skeletal soils are separated, and some distances of groups within the fine-loamy soils shift, but ultimately there is little effect as the variation is still constrained within moderately deep depth class.
 
 ```{r}
 m3 <- cluster::agnes(x3[complete.cases(x3),], method = "gaverage")
 plot(as.dendrogram(m3))
 ```
 
-If we add the `taxpartsize` and depth class ratings back in with the continuous data we see that we get the exact same clustering as with the prior model (which included no categorical predictors). this indicates the categories are adequately covered by the numeric quantities we replaced them with.
+If we add the `taxpartsize` and depth class ratings back in with the continuous data we see that we get the exact same clustering as with the prior model (which included no categorical predictors). This indicates the categories are adequately covered by the numeric quantities we replaced them with.
 
 ```{r}
 m4 <- cluster::agnes(x4[complete.cases(x4),], method = "gaverage")
@@ -206,23 +205,23 @@ x5 <- subset(site(spc), select = c("rt", "rd", "pc", "pf", "dp", "mc", "mf"))
 
 # the simplest model uses the particle size family and the depth class
 m0 <- .CLUSTERFUN(x0, spc)
-sharpshootR::plotProfileDendrogram(spc, m0, name = NULL)
+aqp::plotProfileDendrogram(spc, m0, name = NULL)
 #
 m1 <- .CLUSTERFUN(x1, spc)
-sharpshootR::plotProfileDendrogram(spc, m1, name = NULL)
+aqp::plotProfileDendrogram(spc, m1, name = NULL)
 
 m2 <- .CLUSTERFUN(x2, spc)
-sharpshootR::plotProfileDendrogram(spc, m2, name = NULL)
+aqp::plotProfileDendrogram(spc, m2, name = NULL)
 
 m3 <- .CLUSTERFUN(x3, spc)
-sharpshootR::plotProfileDendrogram(spc, m3, name = NULL)
+aqp::plotProfileDendrogram(spc, m3, name = NULL)
 ```
 
-`sharpshootR::plotProfileDendrogram()` can also take most arguments you would supply to `aqp::plotSPC()`.
+`aqp::plotProfileDendrogram()` can also take most arguments you would supply to `aqp::plotSPC()`.
 
 ```{r}
 m4 <- .CLUSTERFUN(x4, spc)
-sharpshootR::plotProfileDendrogram(
+aqp::plotProfileDendrogram(
   spc,
   m4,
   print.id = FALSE,
@@ -233,7 +232,7 @@ sharpshootR::plotProfileDendrogram(
 )
 
 m5 <- .CLUSTERFUN(x5, spc)
-sharpshootR::plotProfileDendrogram(
+aqp::plotProfileDendrogram(
   spc,
   m5,
   print.id = FALSE,
