@@ -21,7 +21,10 @@ knitr::opts_chunk$set(
 
 The goal of {SOILmilaR} is to provide methods for applying standardized, customizable "similar soils" rules to site-level data derived from various sources.
 
-The main method in this package to implement this method is `similar_soils()`. It follows the process outlined in Norfleet & Eppinette (1993):
+The core function to implement this method is `similar_soils()`, which compares a set of soils against one soil type or combination of soil conditions. 
+`similar_soils()` can be called iteratively using the `design_mapunit()` function.
+
+The method generally follows the process outlined in Norfleet & Eppinette (1993):
 
 > Norfleet, M.L. and Eppinette, R.T. (1993), A Mathematical Model for Determining Similar and Contrasting Inclusions for Map Unit Descriptons. Soil Survey Horizons, 34: 4-5. <https://doi.org/10.2136/sh1993.1.0004>
 
@@ -37,31 +40,41 @@ remotes::install_github("brownag/SOILmilaR")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is an example that shows you how `similar_soils()` works.
 
+First we generate a synthetic data set using random soil depths across a range of depth classes, as well as random particle size control section clay content and fragments.
+
+Then we apply a subset of taxonomic rules for loamy soils to assign a taxonomic particle size class.
 ```{r example}
 library(SOILmilaR)
-set.seed(456)
 
-x <- do.call('rbind', lapply(1:3, \(i) data.frame(id = paste0(LETTERS[1:10], i),
-  taxpartsize = c("fine-loamy", "loamy", "fine-loamy", "fine-loamy",
-                  "coarse-loamy", "coarse-loamy", "coarse-loamy", "loamy-skeletal",
-                  "loamy-skeletal", "loamy-skeletal"),
-  depth = runif(10, 35, 150),
-  pscs_clay = c(runif(4, 18, 35), runif(6, 14, 18)),
-  pscs_frags = c(runif(3, 0, 15), runif(4, 10, 34),
-                 runif(3, 35, 60) + c(0, 40, 0)))))
+set.seed(123)
+x <- do.call('rbind', lapply(1:3, \(i) data.frame(id = paste0(LETTERS[1:10], i), 
+                                                  depth = runif(10, 35, 150), 
+                                                  pscs_clay = c(runif(4, 18, 35), runif(6, 14, 18)), 
+                                                  pscs_frags = c(runif(3, 0, 15), runif(4, 10, 34), runif(3, 35, 60) + c(0, 40, 0)))))
+x$taxpartsize <- interaction(cut(x$pscs_clay, c(0, 18, 35, 60, 100)),
+                             cut(x$pscs_frags, c(0, 35, 90, 100)), drop = TRUE)
+x$taxpartsize <- match(as.character(x$taxpartsize), c("(0,18].(0,35]", "(18,35].(0,35]", "(0,18].(35,90]", "(18,35].(35,90]"))
+x$taxpartsize <- c("coarse-loamy", "fine-loamy", "loamy-skeletal", "loamy-skeletal")[x$taxpartsize]
+x$taxpartsize[x$depth <= 50] <- "loamy"
+x$taxpartsize[x$pscs_frags > 90] <- "fragmental"
+```
 
+
+Then we create some rating functions for properties of interest.
+
+```{r}
 rate_taxpartsize <- function(x) {
-  # TODO: this is just made up logic for this example and needs to be updated
-  dplyr::case_match(x,
+  dplyr::case_match(x, 
                     c("sandy-skeletal") ~ 1,
-                    c("sandy") ~ 2,
-                    c("loamy", "coarse-loamy", "coarse-silty") ~ 3,
-                    c("fine-loamy", "fine-silty") ~ 4,
-                    c("clayey", "fine") ~ 5,
-                    c("very-fine") ~ 6,
-                    c("loamy-skeletal", "clayey-skeletal") ~ 7)
+                    c("sandy") ~ 3,
+                    c("loamy", "coarse-loamy", "coarse-silty") ~ 5,
+                    c("fine-loamy", "fine-silty") ~ 7,
+                    c("clayey", "fine") ~ 9,
+                    c("very-fine") ~ 11,
+                    c("loamy-skeletal", "clayey-skeletal") ~ 13,
+                    "fragmental" ~ 15)
 }
 
 rate_depthclass <- function(x,
@@ -77,23 +90,42 @@ rate_depthclass <- function(x,
   factor(res, levels = levels(res), labels = names(breaks), ordered = TRUE)
 }
 
-rate_pscs_clay <- function(x, breaks = c(18, 27, 40, 60, 100)) {
+rate_pscs_clay <- function(x, breaks = c(18, 35, 60, 100)) {
   res <- cut(x, c(0, breaks))
   factor(res, levels = levels(res), ordered = TRUE)
 }
+```
 
+To run `similar_soils()`, we pass a _data.frame_ or _SoilProfileCollection_ as the first argument. The second argument is a named list that provides a mapping between site-level properties and rating functions. The list elements are functions with minimum arguments `x` and `...`, and the element names are the corresponding columns.
+
+```{r}
 m <- list(taxpartsize = rate_taxpartsize,
           depth = rate_depthclass,
           pscs_clay = rate_pscs_clay)
 
 s <- similar_soils(x, m)
-head(s)
+```
 
+Here we inspect the tabular output of a single run.
+```{r}
+head(s)
+```
+
+The rating values can be used as surrogates for the detailed properties for calculating distance.
+
+Here, we use `cluster::agnes()` to cluster similar sets of rating values, and render a dendrogram.
+
+```{r}
 # inspect distances using agglomerative clustering+dendrogram
 d <- cluster::agnes(s[, 5, drop = FALSE], method = "gaverage")
 d$height <- d$height + 0.2 # fudge factor for 0-distance
 plot(stats::as.dendrogram(d), center = TRUE, type = "triangle")
+```
 
+
+If we set `absolute=FALSE` then the differences between soils can be negative, which can help with processing ratings that are ordinal in nature.
+
+```{r}
 # allow relative contrast ratings to be negative
 # (i.e. ordinal factors, concept of "limiting")
 # absolute value is still used for "similar" threshold
@@ -105,3 +137,37 @@ d2$height <- d2$height + 0.2 # fudge factor for 0-distance
 
 plot(stats::as.dendrogram(d2), center = TRUE, type = "triangle")
 ```
+
+### `design_mapunit()` function
+
+A higher-level wrapper function around `similar_soils()` is `design_mapunit()`. It takes the same inputs as `similar_soils()` but it processes the data iteratively until there are no data remaining to be grouped.
+
+Here we use the same input data.frame and rating function.
+
+```{r}
+d <- design_mapunit(x, m)
+
+d[order(d$component), ]
+
+sort(prop.table(table(d$component)), decreasing = TRUE)
+```
+
+If we assume that the collection observations in `x` are spatially representative of the mapunit extent, it is reasonable to consider the resulting proportions to be similar to the abundance represented with component percentages.
+
+A literal interpretation of this output would result in a map unit with 5 groups of similar soils, of which 4 could be major components. Alpha appears to be dominant, Beta and Gamma are co-dominant in second place, Delta and Epsilon are dissimilar, limiting, and very strongly contrasting, with Epsilon as a minor component.
+
+```{r}
+apply(d[2:4], 2, \(dd) {
+  aggregate(dd, by = list(component = d$component), quantile)
+})
+```
+
+If we summarize the properties of the resulting groups, we have:
+
+ - Alpha: moderately deep to deep, loamy-skeletal
+ - Beta: deep to moderately deep, fine-loamy
+ - Gamma: deep to moderately deep, coarse-loamy
+ - Delta: shallow, loamy
+ - Epsilon: moderately deep to deep, fragmental
+
+Depending on the context of where these soils occur within the mapunit, one may opt to further combine (or perhaps split out) unique conditions as the pertain to unique soil properties, landforms, and vegetation.

@@ -3,14 +3,15 @@
 \docType{data}
 \name{greekletters}
 \alias{greekletters}
-\title{Table of Greek Letters in upper and lowercase, and ASCII equivalent}
+\title{Table of Greek Letters in upper and lowercase, and ASCII equivalents}
 \format{
 An object of class \code{data.frame} with 24 rows and 4 columns.
 }
 \usage{
-data(greekletters)
+data(greekletters, package = "SOILmilaR")
 }
 \description{
-A data.frame containing the name, upper case, and lowercase (unicode) characters, along with ASCII equivalents.
+A \emph{data.frame} containing the name, upper case, and lowercase
+(unicode) characters, along with ASCII equivalents.
 }
 \keyword{datasets}

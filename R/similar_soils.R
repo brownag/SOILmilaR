@@ -45,28 +45,22 @@
 #'   Descriptons. Soil Survey Horizons, 34: 4-5.
 #'   <https://doi.org/10.2136/sh1993.1.0004>
 #'
-#' @examplesIf !inherits(try(requireNamespace("aqp", quietly=TRUE) && requireNamespace("dplyr", quietly=TRUE) && requireNamespace("cluster", quietly=TRUE), silent=TRUE), 'try-error')
+#' @examplesIf requireNamespace("dplyr", quietly=TRUE) && requireNamespace("cluster", quietly=TRUE)
 #'
-#' set.seed(456)
-#'
-#' x <- do.call('rbind', lapply(1:3, \(i) data.frame(id =
-#'   paste0(LETTERS[1:10], i), taxpartsize = c("fine-loamy", "loamy",
-#'   "fine-loamy", "fine-loamy", "coarse-loamy", "coarse-loamy", "coarse-loamy",
-#'   "loamy-skeletal", "loamy-skeletal", "loamy-skeletal"), depth = runif(10,
-#'   35, 150), pscs_clay = c(runif(4, 18, 35), runif(6, 14, 18)), pscs_frags =
-#'   c(runif(3, 0, 15), runif(4, 10, 34), runif(3, 35, 60) + c(0, 40, 0)))))
+#' data(loamy, package = "SOILmilaR")
 #'
 #' rate_taxpartsize <- function(x) {
-#'   # TODO: this is just made up logic for this example and needs to be updated
 #'   dplyr::case_match(x,
 #'                     c("sandy-skeletal") ~ 1,
-#'                     c("sandy") ~ 2,
-#'                     c("loamy", "coarse-loamy", "coarse-silty") ~ 3,
-#'                     c("fine-loamy", "fine-silty") ~ 4,
-#'                     c("clayey", "fine") ~ 5,
-#'                     c("very-fine") ~ 6,
-#'                     c("loamy-skeletal", "clayey-skeletal") ~ 7)
+#'                     c("sandy") ~ 3,
+#'                     c("loamy", "coarse-loamy", "coarse-silty") ~ 5,
+#'                     c("fine-loamy", "fine-silty") ~ 7,
+#'                     c("clayey", "fine") ~ 9,
+#'                     c("very-fine") ~ 11,
+#'                     c("loamy-skeletal", "clayey-skeletal") ~ 13,
+#'                     "fragmental" ~ 15)
 #' }
+#'
 #'
 #' rate_depthclass <- function(x, breaks = c( `very shallow` = 25, `shallow` =
 #'   50, `moderately deep` = 100, `deep` = 150, `very deep` = 1e4 ), pattern =
@@ -85,7 +79,7 @@
 #' m <- list(taxpartsize = rate_taxpartsize, depth = rate_depthclass,
 #' pscs_clay = rate_pscs_clay)
 #'
-#' s <- similar_soils(x, m)
+#' s <- similar_soils(loamy, m)
 #' head(s)
 #'
 #' # inspect distances using agglomerative clustering+dendrogram
@@ -95,7 +89,7 @@
 #'
 #' # allow relative contrast ratings to be negative # (i.e. ordinal factors, concept of "limiting")
 #' # absolute value is still used for "similar" threshold
-#' s2 <- similar_soils(x, m, absolute=FALSE)
+#' s2 <- similar_soils(loamy, m, absolute=FALSE)
 #'
 #' # inspect distances using agglomerative clustering+dendrogram
 #' d2 <- cluster::agnes(s2[, 5, drop = FALSE], method="gaverage")
@@ -112,6 +106,10 @@ similar_soils <- function(
    absolute = TRUE,
    verbose = TRUE
  ) {
+
+  if (!inherits(x, c("data.frame", "SoilProfileCollection"))) {
+    stop("`x` must be a data.frame or SoilProfileCollection", call. = FALSE)
+  }
 
   if (!missing(thresh)) {
     .Deprecated(msg = "`thresh` argument has been split into `thresh_single` and `thresh_all`, please use one or both instead. Passing `thresh_all=thresh` and `thresh_single=thresh` for backward compatibility.")
@@ -131,6 +129,16 @@ similar_soils <- function(
 
   # calculate interaction of resulting conditions
   ir <- interaction(r)
+
+  nr <- nrow(x)
+  if (nr %in% c(0, 1)) {
+    result <- r
+    result <- cbind(result, data.frame(group = ir,
+                                       similar_single = 0L,
+                                       similar_all = 0L,
+                                       similar = TRUE)[nr,])
+    return(result)
+  }
 
   # use the dominant condition unless otherwise specified
   if (is.null(condition)) {
@@ -167,14 +175,15 @@ similar_soils <- function(
     .absfun <- function(x) x
 
   ex[] <- lapply(seq_along(names(ex)), function(y) {
-    .absfun(ex[[y]] - en[[y]][1])
+    .absfun(as.integer(ex[[y]]) - as.integer(en[[y]][1]))
   })
 
   r$similar_dist <- 0
   r$similar_single <- 0
 
-  r$similar_single[which(lex)] <- apply(ex, MARGIN = 1, max)
+  r$group <- ir
   r$similar_dist[which(lex)] <- rowSums(ex)
+  r$similar_single[which(lex)] <- apply(ex, MARGIN = 1, max)
   r$similar <- ((abs(r$similar_dist) < thresh_all) & (abs(r$similar_single) < thresh_single))
   r <- data.frame(x[idname], r)
 
@@ -182,8 +191,10 @@ similar_soils <- function(
 }
 
 .rate_fun <- function(x, mapping) {
-  as.data.frame(sapply(names(mapping), \(y) {
+  res <- lapply(names(mapping), \(y) {
     mapping[[y]](x[[y]])
-  }))
+  })
+  names(res) <- names(mapping)
+  as.data.frame(res)
 }
 
