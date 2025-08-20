@@ -10,7 +10,6 @@
 #'
 #' @return A data.frame-like object corresponding to `aqp_df_class(x)`
 #' @export
-#'
 #' @examplesIf !inherits(try(requireNamespace("aqp", quietly = TRUE) && requireNamespace("soilDB", quietly = TRUE), silent = TRUE), 'try-error')
 #'
 #' # load aqp, and data from soilDB
@@ -25,14 +24,16 @@
 #'
 #' # left join to site table of loafercreek
 #' site(loafercreek) <- pscs_cf
+#'
+#' loafercreek$pscs_clay
 pscs_weighted <- function(x, vars, na.rm = FALSE,
                           pscsbounds = c("psctopdepth", "pscbotdepth"),
                           prefix = "pscs_") {
   if (!requireNamespace("aqp"))
     stop("package 'aqp' is required")
   x <- trunc(aqp::reduceSPC(x, vars), x[[pscsbounds[1]]], x[[pscsbounds[2]]])
-  h <- data.table::data.table(horizons(x))
-  idn <- idname(x)
+  h <- data.table::data.table(aqp::horizons(x))
+  idn <- aqp::idname(x)
   l <- list(h[[idn]])
   names(l) <- idn
   .summaryFUN <- function(y) {
@@ -43,5 +44,43 @@ pscs_weighted <- function(x, vars, na.rm = FALSE,
   res <- h[, .summaryFUN(.SD), by = l, .SDcols = c(aqp::horizonDepths(x), vars)]
   vi <- which(colnames(res) %in% vars)
   colnames(res)[vi] <- paste0(prefix, colnames(res)[vi])
-  aqp:::.as.data.frame.aqp(res, aqp::aqp_df_class(x))
+  .spcdf(res, aqp::aqp_df_class(x))
+}
+
+.spcdf <- function (x, as.class = "data.frame", ...)
+{
+  if (class(x)[1] == "NULL")
+    stop(sprintf("input object is NULL, expected '%s'", as.class))
+  if (!inherits(x, "data.frame")) {
+    stop(sprintf("input data class %s does not inherit from `data.frame`",
+                 class(x)[1]), call. = TRUE)
+  }
+  cond <- class(x)[1] == as.class
+  test <- all(length(cond) > 0 & cond)
+  if (is.null(test) | is.na(test)) {
+    as.class <- "data.frame"
+    message("missing metadata for aqp_df_class -- run aqp::rebuildSPC(object) to fix slots and metadata")
+  }
+  else if (test) {
+    rownames(x) <- NULL
+    return(x)
+  }
+  switch(as.class, data.table = {
+    if (requireNamespace("data.table", quietly = TRUE)) return(data.table::as.data.table(x,
+                                                                                         ...))
+    message("using data.table class in SoilProfileCollection slots requires the `data.table` package")
+  },
+  ## NB: tibble support removed, see aqp:::.as.data.frame.aqp
+  {
+    if (as.class != "data.frame") {
+      message(sprintf("failed to use %s as data.frame class",
+                      as.class))
+      aqp::metadata(x)$aqp_df_class <- "data.frame"
+      warning("data.table and tbl_df in SoilProfileCollection data.frame slots are EXPERIMENTAL, defaulting to data.frame",
+              call. = FALSE)
+    }
+    res <- as.data.frame(x, ...)
+    rownames(res) <- NULL
+    return(res)
+  })
 }

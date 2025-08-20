@@ -90,7 +90,7 @@ rate_taxpartsize <- function(x) {
                     c("loamy-skeletal", "clayey-skeletal") ~ 7)
 }
 
-  rate_depthclass <- function(x, breaks = c( `very shallow` = 25, `shallow` =
+rate_depthclass <- function(x, breaks = c( `very shallow` = 25, `shallow` =
   50, `moderately deep` = 100, `deep` = 150, `very deep` = 1e4 ), pattern =
   "R|Cr|Cd|kk|m", hzdesgn = aqp::guessHzDesgnName(x, required = TRUE),
                             ...) {
@@ -98,30 +98,31 @@ rate_taxpartsize <- function(x) {
   factor(res, levels = levels(res), labels = names(breaks), ordered = TRUE)
 }
 
-  rate_pscs_clay <- function(x,
+rate_pscs_clay <- function(x,
                            breaks = c(18, 27, 40, 60, 100)) {
   res <- cut(x, c(0, breaks))
   factor(res, levels = levels(res), ordered = TRUE)
 }
 
-  m <- list(taxpartsize = rate_taxpartsize, depth = rate_depthclass,
-  pscs_clay = rate_pscs_clay)
+m <- list(taxpartsize = rate_taxpartsize, depth = rate_depthclass,
+pscs_clay = rate_pscs_clay)
 
-  s <- similar_soils(x, m) head(s)
+s <- similar_soils(x, m)
+head(s)
 
-  # inspect distances using agglomerative clustering+dendrogram d <-
-  cluster::agnes(s[, 5, drop = FALSE], method="gaverage") d$height <-
-  d$height + 0.2 # fudge factor for 0-distance plot(stats::as.dendrogram(d),
-  center=TRUE, type="triangle")
+# inspect distances using agglomerative clustering+dendrogram
+d <- cluster::agnes(s[, 5, drop = FALSE], method="gaverage")
+d$height <- d$height + 0.2 # fudge factor for 0-distance
+plot(stats::as.dendrogram(d), center=TRUE, type="triangle")
 
-  # allow relative contrast ratings to be negative # (i.e. ordinal factors,
-  concept of "limiting") # absolute value is still used for "similar"
-  threshold s2 <- similar_soils(x, m, absolute=FALSE)
+# allow relative contrast ratings to be negative # (i.e. ordinal factors, concept of "limiting")
+# absolute value is still used for "similar" threshold
+s2 <- similar_soils(x, m, absolute=FALSE)
 
-  # inspect distances unsing agglomerative clustering+dendrogram d2 <-
-  cluster::agnes(s2[, 5, drop = FALSE], method="gaverage") d2$height <-
-  d2$height + 0.2 # fudge factor for 0-distance
-  plot(stats::as.dendrogram(d2), center=TRUE, type="triangle")
+# inspect distances using agglomerative clustering+dendrogram
+d2 <- cluster::agnes(s2[, 5, drop = FALSE], method="gaverage")
+d2$height <- d2$height + 0.2 # fudge factor for 0-distance
+plot(stats::as.dendrogram(d2), center=TRUE, type="triangle")
 \dontshow{\}) # examplesIf}
 }
 \references{

@@ -44,5 +44,7 @@ pscs_cf
 
 # left join to site table of loafercreek
 site(loafercreek) <- pscs_cf
+
+loafercreek$pscs_clay
 \dontshow{\}) # examplesIf}
 }

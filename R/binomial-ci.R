@@ -8,8 +8,8 @@
 #'
 #' @return matrix containing columns `"est"`, `"lwr.ci"`, `"upr.ci"`
 #' @export
-#'
-#' @examples
+#' @importFrom stats qnorm qt quantile rbinom runif weighted.mean
+#' @examplesIf requireNamespace("DescTools")
 #'
 #' library(DescTools)
 #'

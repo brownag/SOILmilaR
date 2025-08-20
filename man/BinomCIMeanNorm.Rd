@@ -20,6 +20,7 @@ matrix containing columns \code{"est"}, \code{"lwr.ci"}, \code{"upr.ci"}
 This method does not account for estimated confidence intervals for each unique experiment, and it uses the normal approximation to build confidence intervals. This is suitable for cases where the Central Limit Theorem holds (i.e. 30+ \emph{experiments}).
 }
 \examples{
+\dontshow{if (requireNamespace("DescTools")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 library(DescTools)
 
@@ -35,5 +36,5 @@ BinomCIMeanNorm(x, 10)
 
 # compare to straight arithmetic average
 colMeans(x)
-
+\dontshow{\}) # examplesIf}
 }
