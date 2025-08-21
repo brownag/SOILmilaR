@@ -141,37 +141,37 @@ being assigned the first label.</p>
 <span class="r-in"><span><span class="va">mapunit_composition</span> <span class="op">&lt;-</span> <span class="fu">design_mapunit</span><span class="op">(</span><span class="va">loamy</span>, <span class="va">m</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">mapunit_composition</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">mapunit_composition</span><span class="op">$</span><span class="va">component</span><span class="op">)</span>, <span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    id    taxpartsize     depth pscs_clay pscs_frags component</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  A1     fine-loamy  68.07141  34.26617 13.3430897     Alpha</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  B1     fine-loamy 125.65509  25.70668 10.3920511     Alpha</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  C1     fine-loamy  82.03235  29.51870  9.6076022     Alpha</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  D1     fine-loamy 136.54700  27.73477 33.8624746     Alpha</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 A2     fine-loamy 145.74779  20.42760  0.6874675     Alpha</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 B2     fine-loamy 138.76439  25.04729  6.6330011     Alpha</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 C2     fine-loamy 114.43111  25.03331 11.9838727     Alpha</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 D2     fine-loamy 126.47875  24.27037 12.9255822     Alpha</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21 A3     fine-loamy 111.48825  30.82608  3.6542921     Alpha</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23 C3     fine-loamy  79.15651  30.07310  6.2647017     Alpha</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24 D3     fine-loamy  66.55412  18.01062 28.9167000     Alpha</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  H1 loamy-skeletal 137.62819  14.16824 49.8535505      Beta</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  I1 loamy-skeletal  98.41503  15.31168 82.2289934      Beta</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 J1 loamy-skeletal  87.51069  17.81801 38.6778412      Beta</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18 H2 loamy-skeletal  59.88691  15.86385 53.8326966      Beta</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20 J2 loamy-skeletal  61.63697  17.43131 44.3615694      Beta</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28 H3 loamy-skeletal 128.42479  16.45108 57.3262779      Beta</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30 J3 loamy-skeletal  85.58064  14.44454 39.3763163      Beta</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  F1          loamy  40.23900  17.59930 27.0047312     Delta</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 E2          loamy  37.83057  14.60978 23.4627516     Delta</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22 B3          loamy  45.90668  28.69676 10.0208338     Delta</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19 I2     fragmental  71.59082  15.06389 97.3761340   Epsilon</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29 I3     fragmental 126.34937  15.40719 97.1617265   Epsilon</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  E1   coarse-loamy 143.15374  14.41170 25.7369392     Gamma</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  G1   coarse-loamy  95.73213  14.98435 23.0575846     Gamma</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16 F2   coarse-loamy  89.94654  14.55522 14.9567534     Gamma</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17 G2   coarse-loamy 122.22285  14.93214 13.0607596     Gamma</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25 E3   coarse-loamy 128.68360  15.90127 12.4687515     Gamma</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26 F3   coarse-loamy  86.57938  14.88048 20.4374258     Gamma</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27 G3   coarse-loamy 128.15740  15.51927 33.6389675     Gamma</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    id    taxpartsize     depth component</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  A1     fine-loamy  68.07141     Alpha</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  B1     fine-loamy 125.65509     Alpha</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  C1     fine-loamy  82.03235     Alpha</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  D1     fine-loamy 136.54700     Alpha</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 A2     fine-loamy 145.74779     Alpha</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 B2     fine-loamy 138.76439     Alpha</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 C2     fine-loamy 114.43111     Alpha</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 D2     fine-loamy 126.47875     Alpha</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21 A3     fine-loamy 111.48825     Alpha</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23 C3     fine-loamy  79.15651     Alpha</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24 D3     fine-loamy  66.55412     Alpha</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  H1 loamy-skeletal 137.62819      Beta</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  I1 loamy-skeletal  98.41503      Beta</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 J1 loamy-skeletal  87.51069      Beta</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18 H2 loamy-skeletal  59.88691      Beta</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 J2 loamy-skeletal  61.63697      Beta</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28 H3 loamy-skeletal 128.42479      Beta</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30 J3 loamy-skeletal  85.58064      Beta</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  F1          loamy  40.23900     Delta</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 E2          loamy  37.83057     Delta</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22 B3          loamy  45.90668     Delta</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 I2     fragmental  71.59082   Epsilon</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29 I3     fragmental 126.34937   Epsilon</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  E1   coarse-loamy 143.15374     Gamma</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  G1   coarse-loamy  95.73213     Gamma</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16 F2   coarse-loamy  89.94654     Gamma</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17 G2   coarse-loamy 122.22285     Gamma</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25 E3   coarse-loamy 128.68360     Gamma</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26 F3   coarse-loamy  86.57938     Gamma</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27 G3   coarse-loamy 128.15740     Gamma</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/proportions.html" class="external-link">prop.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">mapunit_composition</span><span class="op">$</span><span class="va">component</span><span class="op">)</span><span class="op">)</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
