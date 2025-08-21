@@ -71,6 +71,16 @@ design_mapunit <- function(x,
                            component_labels = SOILmilaR::greekletters[[1]],
                            ...) {
 
+  if (inherits(x, 'SoilProfileCollection') &&
+      requireNamespace("aqp")) {
+    if (missing(idname)) {
+      idname <- aqp::idname(x)
+    }
+    x <- aqp::site(x)[c(idname, names(mapping))]
+  } else {
+    x <- x[c(idname, names(mapping))]
+  }
+
   args <- list(...)
 
   if (!is.null(args$threshold_single) &&
